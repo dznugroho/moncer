@@ -3,8 +3,8 @@
 <head>
   <?php $this->load->view('include/head.php') ?>
 	<!-- CSS Libraries -->
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/select.bootstrap4.min.css">  
+	<link rel="stylesheet" href="<?= base_url('assets/modules/dataTables.bootstrap4.min.css')?>">
+  	<link rel="stylesheet" href="<?= base_url('assets/modules/select.bootstrap4.min.css')?>">   
 </head>
 <body>
   <div id="app">
@@ -111,13 +111,19 @@
 
   <?php $this->load->view('include/script.php') ?>
 	<!-- Page Specific JS File -->
-	<script src="<?= base_url()?>assets/js/page/modules-datatables.js"></script>
-
-  <script src="<? echo base_url()?>assets/modules/jquery.dataTables.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/select.bootstrap4.min.js"></script>
+	<script src="<?= base_url('assets/modules/jquery.dataTables.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/dataTables.bootstrap4.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/select.bootstrap4.min.js')?>"></script>
+	
+  <script src="<?= base_url('assets/js/page/modules-datatables.js')?>"></script>
 	
 	<script type="text/javascript">
+//   function timedRefresh(timeoutPeriod) {
+// 	setTimeout("location.reload(true);",timeoutPeriod);
+// 	}
+
+// 	window.onload = timedRefresh(5000);
+
    $(document).ready(function(){
 			$('#mytable').DataTable();
 		});	
@@ -126,29 +132,7 @@
 		$('#btn-delete').attr('href', url);
 		$('#deleteModal').modal();
 		}
- 
-	// <?php if($this->session->userdata('id') == $data->id){ ?>
-	
-	// 		$(document).ready(function(){
-		
-	// 			$("#btn-action").remove();
-		
-	// 			$(".td-btn").remove();
-		
-	// 		});
-	// <?php ?>
-		
-	// 	// <?php } else if($this->session->userdata('role') == "0"){ ?>
-		
-	// 	// 	$(document).ready(function(){
-		
-	// 	// 		$("#btn-action").remove();
-		
-	// 	// 		$(".td-btn").remove();
-		
-	// 	// 	});
-	
-	// <?php } else {}; ?>
+
  
   </script>
 </body>

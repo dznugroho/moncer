@@ -3,8 +3,8 @@
 <head>
   <?php $this->load->view('include/head.php') ?>
 	<!-- CSS Libraries -->
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/select.bootstrap4.min.css">  
+	<link rel="stylesheet" href="<?= base_url('assets/modules/dataTables.bootstrap4.min.css')?>">
+  	<link rel="stylesheet" href="<?= base_url('assets/modules/select.bootstrap4.min.css')?>">  
 </head>
 <body>
   <div id="app">
@@ -82,11 +82,12 @@
   <?php $this->load->view('include/script.php') ?>
 	<!-- Page Specific JS File -->
 
-  <script src="<? echo base_url()?>assets/modules/jquery.dataTables.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/select.bootstrap4.min.js"></script>
- 
-  <script src="<?= base_url()?>assets/js/page/modules-datatables.js"></script>
+	<script src="<?= base_url('assets/modules/jquery.dataTables.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/dataTables.bootstrap4.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/select.bootstrap4.min.js')?>"></script>
+	
+  <script src="<?= base_url('assets/js/page/modules-datatables.js')?>"></script>
+	
 	
 	<script type="text/javascript">
     $(document).ready(function(){
@@ -97,26 +98,6 @@
 		$('#btn-delete').attr('href', url);
 		$('#deleteModal').modal();
 		}
- 
-	// <?php if($this->session->userdata('role') == "1"){ ?>
-	
-	// 		$(document).ready(function(){
-		
-	// 			$(".btn-danger").remove();
-		
-	// 		});
-		
-	// 	<?php } else if($this->session->userdata('role') == "0"){ ?>
-		
-	// 		$(document).ready(function(){
-		
-	// 			$("#btn-action").remove();
-		
-	// 			$(".td-btn").remove();
-		
-	// 		});
-	
-	// <?php } else {}; ?>
  
   </script>
 </body>

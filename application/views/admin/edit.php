@@ -4,8 +4,8 @@
 <head>
 	<?php $this->load->view('include/head.php') ?>
 	<!-- CSS Libraries -->
-	<link rel="stylesheet" href="<?= base_url() ?>assets/modules/dataTables.bootstrap4.min.css">
-	<link rel="stylesheet" href="<?= base_url() ?>assets/modules/select.bootstrap4.min.css">
+	<link rel="stylesheet" href="<?= base_url('assets/modules/dataTables.bootstrap4.min.css')?>">
+  	<link rel="stylesheet" href="<?= base_url('assets/modules/select.bootstrap4.min.css')?>">  
 </head>
 
 <body>

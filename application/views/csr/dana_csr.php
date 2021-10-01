@@ -3,8 +3,8 @@
 <head>
   <?php $this->load->view('include/head.php') ?>
 	<!-- CSS Libraries -->
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="<?= base_url()?>assets/modules/select.bootstrap4.min.css">  
+	<link rel="stylesheet" href="<?= base_url('assets/modules/dataTables.bootstrap4.min.css')?>">
+  	<link rel="stylesheet" href="<?= base_url('assets/modules/select.bootstrap4.min.css')?>">  
 </head>
 <body>
   <div id="app">
@@ -90,7 +90,7 @@
 							<?php } ?>
 
 							</td> -->
-							<td><?if ($data->status_pendanaan == '1'){
+							<td><?php if ($data->status_pendanaan == "1"){
 									echo '<div class="badge badge-success">Dibuka</div>';
 								}else if ($data->status_pendanaan == '2'){
 									echo '<div class="badge badge-danger">Ditutup</div>';
@@ -125,11 +125,11 @@
   <?php $this->load->view('include/script.php') ?>
 	<!-- Page Specific JS File -->
 
-  <script src="<? echo base_url()?>assets/modules/jquery.dataTables.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/dataTables.bootstrap4.min.js"></script>
-  <script src="<?= base_url()?>assets/modules/select.bootstrap4.min.js"></script>
+	<script src="<?= base_url('assets/modules/jquery.dataTables.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/dataTables.bootstrap4.min.js')?>"></script>
+  <script src="<?= base_url('assets/modules/select.bootstrap4.min.js')?>"></script>
 	
-  <script src="<?= base_url()?>assets/js/page/modules-datatables.js"></script>
+  <script src="<?= base_url('assets/js/page/modules-datatables.js')?>"></script>
 
 	<script type="text/javascript">
     $(document).ready( function () {
