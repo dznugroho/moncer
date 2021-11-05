@@ -45,27 +45,27 @@
                 <div class="row">
               </div>
               <div class="row">
-                <a href="<?= site_url('usulan/datausulan')?>" class="btn btn-primary"><i class="fas fa-arrow-left"> Kembali</a></i>
+                <a href="<?= site_url('usulan/datausulan')?>" class="btn btn-primary btn-md"><i class="fas fa-arrow-left"> Kembali</a></i>
               </div>
               </div>
             </div>
             <div class="card-body">
-              <form method="POST" action="<?php echo base_url('usulan/datausulan/store')?>" enctype="multipart/form-data">
-			  
+            <form method="POST" action="<?php echo base_url('usulan/datausulan/store')?>" enctype="multipart/form-data">
+			  <div class="section-title mt-0">DATA USULAN</div>
 			  <div class="row">
-			  	<div class="form-group col-6">
-					<label>Bidang*</label>
+				<div class="form-group col-6">
+					<label>Bidang Kegiatan</label>
 					<select class="form-control bidang" name="bidang" id="bidang">
-					<option value="">No Selected</option>
+					<option selected disabled value="">--Pilih Bidang--</option>
 					<?php foreach($bidangs as $data):?>
 						<option value="<?php echo $data->id;?>"><?php echo $data->nama_bidang;?></option>
 					<?php endforeach;?>
 					</select>
 				</div>
 				<div class="form-group col-6">
-					<label>Subbidang*</label>
+					<label>Subbidang Kegiatan</label>
 					<select class="form-control subbidang" name="subbidang" id="subbidang">
-						<option value="">No Selected</option>
+						<option selected disabled value="">--Pilih Subbidang--</option>
 					</select>
 				</div>
 			  </div>
@@ -79,16 +79,48 @@
 					<?php echo form_error('nama_kegiatan') ?>
 					</div>
 				</div>
-			 	<div class="form-group col-6">
-                    <label for="">Tanggal Pengusulan</label>
-					<input type="date" class="form-control <?php echo form_error('tgl_pengusulan') ? 'is-invalid':'' ?>" 
-					name="tgl_pengusulan" value="<?= set_value('tgl_pengusulan') ?>">
+				<div class="form-group col-6">
+                    <label for="">Pagu Anggaran</label>
+					<input type="text" class="form-control <?php echo form_error('anggaran') ? 'is-invalid':'' ?>" 
+					name="anggaran" id="anggaran" value="<?= set_value('anggaran') ?>">
 					<div class="invalid-feedback">
-					<?php echo form_error('tgl_pengusulan') ?>
+					<?php echo form_error('anggaran') ?>
 					</div>
 				</div>
 			  </div>
+			  <div class="row">
+			  	<div class="form-group col-6">
+                    <label for="">Jumlah Target</label>
+					<input type="text" class="form-control <?php echo form_error('jumlah_target') ? 'is-invalid':'' ?>" 
+					name="jumlah_target" value="<?= set_value('jumlah_target') ?>">
+					<div class="invalid-feedback">
+					<?php echo form_error('jumlah_target') ?>
+					</div>
+				</div>
+				<div class="form-group col-6">
+					<label>Satuan</label>
+					<select class="form-control" name="satuan_id" id="satuan_id">
+					<option selected disabled value="">--Pilih Satuan--</option>
+					<?php foreach($satuan as $data):?>
+						<option value="<?php echo $data->satuan_id;?>">
+						<?php echo $data->nama_satuan;?></option>
+					<?php endforeach;?>
+					</select>
+				</div>
+			  </div>
 			
+			  <div class="row">	
+				<div class="form-group col-12">
+                    <label for="">Output Kegiatan</label>
+					<input type="text" class="form-control <?php echo form_error('hasil_kegiatan') ? 'is-invalid':'' ?>" 
+					name="hasil_kegiatan" value="<?= set_value('hasil_kegiatan') ?>">
+					<div class="invalid-feedback">
+					<?php echo form_error('hasil_kegiatan') ?>
+					</div>
+				</div>
+				<input type="hidden" class="form-control" name="tahun_pengusulan" 
+				value="<?php date_default_timezone_set('Asia/Jakarta'); echo date('Y');?>">
+			  </div>
 			  <!-- <div class="row">
 			   <div class="form-group col-6">
                     <label for="">Waktu Mulai</label>
@@ -109,18 +141,18 @@
 			  </div> -->
 			  <div class="row">
 				<div class="form-group col-6">
-					<label>Kecamatan*</label>
+					<label>Kecamatan</label>
 					<select class="form-control kecamatan" name="kecamatan" id="kecamatan">
-					<option value="">No Selected</option>
+					<option selected disabled value="">--Pilih Kecamatan--</option>
 					<?php foreach($kecamatans as $data):?>
 						<option value="<?php echo $data->id;?>"><?php echo $data->nama_kecamatan;?></option>
 					<?php endforeach;?>
 					</select>
 				</div>
 				<div class="form-group col-6">
-					<label>Desa*</label>
+					<label>Desa</label>
 					<select class="form-control desa" name="desa" id="desa">
-						<option value="">No Selected</option>
+						<option selected disabled value="">--Pilih Desa--</option>
 					</select>
 				</div>
 			  </div>
@@ -135,30 +167,17 @@
 					</div>
 				</div>
 				<div class="form-group col-6">
-                    <label for="">Anggaran Dibutuhkan</label>
-					<input type="text" class="form-control <?php echo form_error('anggaran') ? 'is-invalid':'' ?>" 
-					name="anggaran" value="<?= set_value('anggaran') ?>">
-					<div class="invalid-feedback">
-					<?php echo form_error('anggaran') ?>
-					</div>
+                    <label for="">File</label><span class="text-danger mb-1"> PDF|DOC|DOCX</span>
+					<input type="file" class="form-control" name="file">
+					
 				</div>
 			  </div>
 
+			  
+			  <div class="section-title mt-0">DATA PENGUSUL</div>
+			
 			  <div class="row">
-				<div class="form-group col-12">
-                    <label for="">Deskripsi Kegiatan</label>
-					<textarea class="form-control <?php echo form_error('deskripsi') ? 'is-invalid':'' ?>" 
-					name="deskripsi" value="<?= set_value('deskripsi') ?>"></textarea>
-					<div class="invalid-feedback">
-					<?php echo form_error('deskripsi') ?>
-					</div>
-				</div>
-			  </div>
-			  <div class="row">
-					DATA PENGUSUL
-			</div>
-			  <div class="row">
-				<div class="form-group col-12">
+				<div class="form-group col-6">
                     <label for="">Nama Pengusul</label>
 					<input type="text" class="form-control <?php echo form_error('nama_pengusul') ? 'is-invalid':'' ?>" 
 					name="nama_pengusul" value="<?= set_value('nama_pengusul') ?>">
@@ -166,15 +185,14 @@
 					<?php echo form_error('nama_pengusul') ?>
 					</div>
 				</div>
-				
-			  </div>
-			  
-			  <div class="row">
 				<div class="form-group col-6">
                     <label for="">Nama Institusi</label>
 					<input type="text" class="form-control" name="nama_institusi" 
 					value="<?= $this->session->userdata('name'); ?>" readonly>
 				</div>
+			  </div>
+			  
+			  <div class="row">
 				<div class="form-group col-6">
 					<label>Kecamatan Pengusul</label>
 					<select class="form-control kecamatan_pengusul" name="kecamatan_pengusul" id="kecamatan_pengusul">
@@ -186,10 +204,7 @@
 					<?php endforeach;?>
 					</select>
 				</div>	
-			  </div>
-
-			  <div class="row">
-			  <div class="form-group col-6">
+				<div class="form-group col-6">
 					<label>Desa Pengusul</label>
 					<select class="form-control desa_pengusul" name="desa_pengusul" id="desa_pengusul">
 					<option disabled>No Selected</option>
@@ -200,29 +215,24 @@
 					<?php endforeach;?>
 					</select>
 				</div>	
+			  </div>
+
+			  <div class="row">
 				<div class="form-group col-6">
                     <label for="">Alamat Pengusul</label>
 					<input type="text" class="form-control" name="alamat_pengusul" 
 					value="<?= $this->session->userdata('alamat'); ?>" readonly>
 				</div>
-			  </div>
-
-			  <div class="row">
 				<div class="form-group col-6">
                     <label for="">No Telp</label>
 					<input type="text" class="form-control" name="no_telp" readonly
 					value="<?= $this->session->userdata('no_telp'); ?>">
 				</div>
-				<div class="form-group col-6">
-                    <label for="">File*</label><span class="text-danger mb-1"> PDF|DOC|DOCX</span>
-					<input type="file" class="form-control" name="file">
-					
-				</div>
 			  </div>
-			    <div class="form-group small text-danger">
-					* required fields
+
+			    
                 <div class="card-footer text-right">
-                  <button type="submit" class="btn btn-primary btn-lg">
+                  <button type="submit" class="btn btn-primary btn-md">
                       Simpan
                   </button>
                 </div>
@@ -294,6 +304,31 @@
 		}); 
 		
 	});
+
+	var rupiah = document.getElementById('anggaran');
+	rupiah.addEventListener('keyup', function(e){
+		// tambahkan 'Rp.' pada saat form di ketik
+		// gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
+		rupiah.value = formatRupiah(this.value, 'Rp. ');
+	});
+
+	/ Fungsi formatRupiah /
+	function formatRupiah(angka, prefix){
+		var number_string = angka.replace(/[^,\d]/g, '').toString(),
+		split   		= number_string.split(','),
+		sisa     		= split[0].length % 3,
+		rupiah     		= split[0].substr(0, sisa),
+		ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+		// tambahkan titik jika yang di input sudah menjadi angka ribuan
+		if(ribuan){
+			separator = sisa ? '.' : '';
+			rupiah += separator + ribuan.join('.');
+		}
+
+		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+		return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+	}
 </script>
 
 </body>

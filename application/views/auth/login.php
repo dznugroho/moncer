@@ -57,13 +57,21 @@
 							<?php } ?>
               <div class="form-group">
                 <label for="username">Username</label>
-                <input id="username" type="text" class="form-control" name="username" tabindex="1" placeholder="Masukan Username" required autofocus>
+                <input id="username" type="text" class="form-control  <?php echo form_error('username') ? 'is-invalid':'' ?>"
+                name="username" tabindex="1" placeholder="Masukan Username" value="<?= set_value('username') ?>" autofocus>
+                <div class="invalid-feedback">
+                  <?php echo form_error('username') ?>
+                </div>
               </div>
               <div class="form-group">
                 <div class="d-block">
                   <label for="password" class="control-label">Password</label>
                 </div>
-                <input id="password" type="password" class="form-control" name="password" tabindex="2"  placeholder="Masukan Password" required>
+                <input id="password" type="password" class="form-control <?php echo form_error('password') ? 'is-invalid':'' ?>" 
+                name="password" tabindex="2"  placeholder="Masukan Password" value="<?= set_value('password') ?>" >
+                <div class="invalid-feedback">
+                  <?php echo form_error('password') ?>
+                </div>
               </div>
 
               <div class="form-group">

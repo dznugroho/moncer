@@ -49,6 +49,7 @@
 				
 				<a href="#" class="nav-link has-dropdown"><i class="fas fa-dice-d6"></i>
 				<span>Data Bidang</span></a>
+
 			  <ul class="dropdown-menu">
 								
 				<li class="nav-item <?=($hal2=='pendidikan')?'active':'';?>">
@@ -62,7 +63,7 @@
 					<a class="nav-link" href="<?= site_url('bidang/lingkungan')?>">Bidang Lingkungan</a>
 				</li>
 				<li class="nav-item <?=($hal2=='pek')?'active':'';?>">
-					<a class="nav-link" href="<?= site_url('bidang/pek')?>">PEK</a>
+					<a class="nav-link" href="<?= site_url('bidang/pek')?>">Bidang PEK</a>
 				</li>
 				<li class="nav-item <?=($hal2=='infrastruktur')?'active':'';?>">
 					<a class="nav-link" href="<?= site_url('bidang/infrastruktur')?>">Bidang Infrastruktur</a>
@@ -83,39 +84,30 @@
 				<i class="fas fa-comment-alt"></i><span> Data Usulan</span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='usulan_masuk')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('usulan/usulan_masuk')?>">
-				<i class="fas fa-file-import"></i><span> Usulan Masuk</span></a>
+			<li class="nav-item <?=($hal2=='validasi_usulan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('usulan/validasi_usulan')?>">
+				<i class="fas fa-check-circle"></i><span> Validasi Usulan</span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='usulan_ditolak')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('usulan/usulan_ditolak')?>">
-				<i class="fas fa-file-excel"></i><span> Usulan Ditolak</span></a>
+			<li class="menu-header">Kelola CSR & Laporan</li>
+
+			<li class="nav-item <?=($hal2=='validasi_pendanaan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/validasi_pendanaan')?>">
+				<i class="fas fa-search-dollar"></i><span> Validasi Pendanaan</span></a>
 			</li>
 
-			<li class="menu-header">Kelola CSR</li>
-
-			<li class="nav-item <?=($hal2=='dana_csr')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/dana_csr')?>">
-				<i class="fas fa-columns"></i><span> Pendanaan CSR</span></a>
+			<li class="nav-item <?=($hal2=='validasi_laporan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/validasi_laporan')?>">
+				<i class="fas fa-calendar-check"></i><span> Validasi Kegiatan </span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='penyerahan_dana')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/penyerahan_dana')?>">
-				<i class="fas fa-columns"></i><span> Penyerahan Dana</span></a>
-			</li>
-			<li class="nav-item <?=($hal2=='pelaksanaan_csr')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/pelaksanaan_csr')?>">
-				<i class="fas fa-columns"></i><span> Pelaksanaan CSR</span></a>
+			<li class="nav-item <?=($hal2=='laporan_kegiatan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/laporan_kegiatan')?>">
+				<i class="fas fa-tasks"></i><span> Laporan Kegiatan </span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='laporan_csr')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/laporan_csr')?>">
-				<i class="fas fa-columns"></i><span> Laporan CSR</span></a>
-			</li>			
-
-			
-
+			<li class="menu-header"></li>
+			<li class="menu-header"></li>
 			<li class="menu-header"></li>
 			<li class="menu-header"></li>
 
@@ -124,43 +116,42 @@
 			
 			<li class="nav-item <?=($hal2=='profile_desa')?'active':'';?>">
 				<a class="nav-link" href="<?php echo site_url('desa/profile_desa'); ?>">
-				<i class="far fa-list-alt"></i> <span>Profil</span></a>
+				<i class="fas fa-user"></i> <span>Profile</span></a>
 			</li>
 
 			<li class="menu-header">CSR</li>
 			
 			<li class="nav-item <?=($hal2=='pengajuan_usulan')?'active':'';?>">
 				<a class="nav-link" href="<?php echo site_url('desa/pengajuan_usulan'); ?>">
-				<i class="far fa-file-alt"></i> <span>Pengajuan Usulan</span></a>
+				<i class="fas fa-comment-alt"></i> <span> Pengajuan Usulan</span></a>
 			</li>
 			
-			<li class="nav-item <?=($hal2=='status_pelaksanaan')?'active':'';?>">
-				<a class="nav-link" href="<?php echo site_url('desa/status_pelaksanaan'); ?>">
-				<i class="far fa-file-alt"></i> <span>Status Pelaksanaan</span></a>
-			</li>
-
-			<li class="nav-item <?=($hal2=='status_csr')?'active':'';?>">
-				<a class="nav-link" href="<?php echo site_url('desa/status_csr'); ?>">
-				<i class="far fa-file-alt"></i> <span>Status CSR</span></a>
+			<li class="nav-item <?=($hal2=='status_kegiatan')?'active':'';?>">
+				<a class="nav-link" href="<?php echo site_url('csr/status_kegiatan'); ?>">
+				<i class="fas fa-tasks"></i> <span> Status Kegiatan CSR</span></a>
 			</li>
 
 				
 		 <?php elseif($this->session->userdata('role')=='3'):?>
 			<li class="menu-header">Profil</li>
 			
-			<li class="nav-item <?=($hal2=='profil_perusahaan')?'active':'';?>">
-				<a class="nav-link" href="<?php echo site_url('perusahaan/profil_perusahaan'); ?>">
-				<i class="far fa-list-alt"></i> <span>Profil</span></a>
+			<li class="nav-item <?=($hal2=='profile_perusahaan')?'active':'';?>">
+				<a class="nav-link" href="<?php echo site_url('perusahaan/profile_perusahaan'); ?>">
+				<i class="fas fa-user"></i> <span> Profile</span></a>
 			</li>
 
-			<li class="menu-header">Usulan Kegiatan</li>
+			<li class="menu-header">CSR</li>
 			<li class="nav-item <?php echo ($hal2=='datausulan')?'active': '' ?>">
 				<a class="nav-link" href="<?php echo site_url('perusahaan/datausulan'); ?>">
-				<i class="far fa-list-alt"></i> <span>Data Usulan</span></a>
+				<i class="fas fa-comment-alt"></i> <span> Pilih Usulan Kegiatan</span></a>
 			</li>
-			<li class="nav-item <?php echo ($hal2=='profil_perusahaan')?'active': '' ?>">
-				<a class="nav-link" href="<?php echo site_url('status_usulankec'); ?>">
-				<i class="far fa-file-alt"></i> <span>Status CSR</span></a>
+			<li class="nav-item <?=($hal2=='status_kegiatan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/status_kegiatan')?>">
+				<i class="fas fa-archive"></i><span> Status Kegiatan CSR</span></a>
+			</li>
+			<li class="nav-item <?php echo ($hal2=='laporan_kegiatan')?'active': '' ?>">
+				<a class="nav-link" href="<?php echo site_url('csr/laporan_kegiatan'); ?>">
+				<i class="fas fa-tasks"></i> <span> Laporan Kegiatan</span></a>
 			</li>
 		
 		 <?php endif;?>  

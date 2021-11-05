@@ -60,13 +60,13 @@ class Perusahaan_model extends CI_Model
 	
 	public function getByUser()
 	{	
-		$username = $this->session->userdata('username');
+		$id = $this->session->userdata('id');
 		return $this->db->select('users.*,kecamatans.nama_kecamatan,desas.nama_desa')
 			->from('users')
 			->join('kecamatans','users.kecamatan 	= kecamatans.id',	'left')
 			->join('desas',		'users.desa 		= desas.id',		'left')
 			->where('users.role', 3)
-			->where('users.username', $username)
+			->where('users.id', $id)
 			->get()
 			->result();
 	}
@@ -82,6 +82,22 @@ class Perusahaan_model extends CI_Model
 		return $this->db->get_where($this->table, ['id' => $id])->row();
 	}
 
+	public function save()
+	{
+		$post = $this->input->post();
+		$this->username = trim($post["username"]);
+		$this->name		= strtoupper($post["name"]);
+		$pass			= $post["password"];
+		$this->password	= password_hash($pass, PASSWORD_DEFAULT);
+		$this->email	= $post["email"];
+		$this->kecamatan= $post["kecamatan"];
+		$this->desa		= $post["desa"];
+		$this->alamat	= $post["alamat"];
+		$this->no_telp	= $post["no_telp"];
+		$this->role		= 3;
+
+		return $this->db->insert($this->table, $this);
+	}
 		
 	public function update($id,$username,$name,$email,$kecamatan,
 						$desa,$alamat,$no_telp)
@@ -110,6 +126,11 @@ class Perusahaan_model extends CI_Model
 					->set('no_telp', 	$no_telp)
 					->where('id',		$id)
 					->update('users');
+	}
+
+	public function delete($id)
+	{
+		return $this->db->delete($this->table, array("id" => $id));
 	}
 
 	

@@ -17,19 +17,19 @@ class Profile_desa extends CI_Controller
 	public function index()
 	{
 		$data['desas'] = $this->desa_model->getByUser();
-		$this->load->view('desa/index', $data);
+		$this->load->view('desa/profil_index', $data);
 	}
 
 	public function edit($id=null)
 	{	
-		if(!isset($id)) redirect('desa/profil_desa');
+		// if(!isset($id)) redirect('desa/profil_desa');
 
 		$data['kecamatans']	= $this->wilayah_model->getKecamatan();
 		$data['desas']		= $this->wilayah_model->getDesa();
-		$data["datadesa"]	= $this->desa_model->getById($id);
-		if(!$data["datadesa"]) show_404();
+		$data["desa"]	= $this->desa_model->getById($id);
+		if(!$data["desa"]) show_404();
 
-		$this->load->view("desa/edit", $data);
+		$this->load->view("desa/profil_edit", $data);
 	}
 
 	public function update()
@@ -51,7 +51,7 @@ class Profile_desa extends CI_Controller
 			$data['desas'] 		= $this->wilayah_model->getDesa();
 			$data["datadesa"] 	= $desa_model->getById($id);
 
-			$this->load->view('desa/edit', $data);
+			$this->load->view('desa/profil_edit', $data);
 			
 		}else{
 			if(empty(trim($post["password"]))){
@@ -67,7 +67,7 @@ class Profile_desa extends CI_Controller
 				$desa_model->update($id,$username,$name,$email,$kecamatan,
 							$desa,$alamat,$no_telp);
 				$this->session->set_flashdata('success', 'Data has been updated');
-				return redirect('desa/profil_desa');
+				return redirect('desa/profile_desa');
 
 			}else{
 				$id			= trim($post["id"]);
@@ -84,7 +84,7 @@ class Profile_desa extends CI_Controller
 				$desa_model->updateWithPass($id,$username,$name,$password,$email,
 									$kecamatan,$desa,$alamat,$no_telp);
 				$this->session->set_flashdata('success', 'Data has been updated');
-				return redirect('desa/profil_desa');
+				return redirect('desa/profile_desa');
 			}
 		}
 	}

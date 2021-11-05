@@ -62,7 +62,7 @@
 					</div>
                 </div>
                 <div class="form-group col-6">
-                    <label for="">Nama Perusahaan*</label>
+                    <label for="">Nama Desa*</label>
 					<input type="text" class="form-control <?php echo form_error('name') ? 'is-invalid':'' ?>" 
 					name="name" placeholder="Masukkan Nama Anda" value="<?= set_value('name') ?>">
 					<div class="invalid-feedback">
@@ -73,7 +73,7 @@
 
 			  <div class="row">
 			   <div class="form-group col-6">
-                    <label for="">Email Perusahaan*</label>
+                    <label for="">Email Desa*</label>
 					<input type="text" class="form-control <?php echo form_error('email') ? 'is-invalid':'' ?>" 
 					name="email" placeholder="Masukkan Email Anda" value="<?= set_value('email') ?>">
 					<div class="invalid-feedback">

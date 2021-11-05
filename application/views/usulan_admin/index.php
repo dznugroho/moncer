@@ -46,8 +46,36 @@
 				</div>
 			</div>
 		<?php endif;?>
+
+		<div class="row"> 
+          <div class="form-group col-3">
+            <select class="form-control" name="bidang" id="bidang">
+              <option value="">Pilih Bidang</option>
+			  	<?php foreach($bidangs as $data):?>
+					<option value="<?php echo $data->id;?>">
+					<?php echo $data->nama_bidang;?></option>
+				<?php endforeach;?>
+            </select>
+          </div>
+          <div class="form-group col-3">
+            <form action="<?php echo site_url('usulan/datausulan/cari'); ?>" method=POST>
+              <select class="form-control" type="text" name="subbidang" id="subbidang">
+                <option value="">Pilih Subbidang</option>
+              </select>
+            </div>
+            <div class="form-group col-3">
+              <input type="text" class="form-control" name="thn_pengusulan" 
+			  id="thn_pengusulan" placeholder="Masukkan Tahun Usulan"> 
+            </div>
+              <div class="form-group col-3">
+                  <button class="btn btn-icon icon-left btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                  <a href="<?php echo site_url('usulan/datausulan'); ?>" class="btn btn-icon icon-left btn-danger" ><i class="fas fa-sync"></i> Reset</a>
+            </form>
+          </div>
+		</div>
+
           <div class="card">
-            <div class="card-header">
+            <!-- <div class="card-header">
               <div class="container">
                 <div class="row">
               </div>
@@ -56,22 +84,26 @@
 				<i class="fas fa-plus"> Tambah Usulan</a></i>
               </div>
               </div>
-            </div>
+            </div> -->
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped hover" id="table-1">
+                <table class="table table-sm" id="table-1">
                     <thead>
                       <tr>
                         <th>No.</th>
                         <th>Nama Bidang</th>
                         <th>Nama Subbidang</th>
-                        <th>Tanggal Pengusulan</th>
+                        <th>Tahun Pengusulan</th>
                         <th>Nama Kegiatan</th>
-                        <th>Anggaran Dibutuhkan</th>
+                        <th>Output Kegiatan</th>
+                        <th>Pagu Anggaran</th>
+                        <th>Target</th>
+                        <th>Lokasi Kegiatan</th>
+                        <th>Institusi Pengusul</th>
                         <th>File</th>
-                        <th id="btn-action">&nbsp;</th>
+                        <!-- <th id="btn-action">&nbsp;</th> -->
                         <th id="btn-action">Action</th>
-                        <th id="btn-action">&nbsp;</th>
+                        <!-- <th id="btn-action">&nbsp;</th> -->
                       </tr>
                     </thead>
                     <tbody>
@@ -84,10 +116,15 @@
 							<td><?php echo $no;?></td>
                             <td><?php echo $data->nama_bidang;?></td>
                             <td><?php echo $data->nama_sub;?></td>
-                            <td><?php echo $data->tgl_pengusulan;?></td>
+                            <td><?php echo $data->thn_pengusulan;?></td>
                             <td><?php echo $data->nama_kegiatan;?></td>
+                            <td><?php echo $data->hasil_kegiatan;?></td>
 							<td><?php echo 'Rp.'.number_format($data->anggaran);?></td>
-							<td><?php if($data->file=="default.pdf"){
+							<td><?php echo $data->jumlah_target.'&nbsp;'.$data->nama_satuan; ?></td>
+							<td><?php echo $data->alamat_kegiatan;?></td>
+                            <td><?php echo $data->name;?></td>
+							<td><?php if($data->file=="default.pdf"
+							OR $data->file==""){
 							$fill = $data->file;
 							$aksi = site_url('usulan/datausulan/addFile');
 							$tampil = 
@@ -110,15 +147,23 @@ HEREDOCS;
 
 							</td>
 							<td class="td-btn">
-								<a href="<?php echo site_url('usulan/datausulan/show/'.$data->id);?>" class="btn btn-success btn-sm"><i class="fas fa-search"></a></i>
+							<div class="btn-group mb-3 btn-group-sm" role="group" aria-label="Basic example">
+								
+								<a href="<?php echo site_url('usulan/datausulan/show/'.$data->id);?>" 
+								class="btn btn-success btn-md" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Detail"><i class="fas fa-search"></a></i>
+
+								<!-- <a href="<?php echo site_url('usulan/datausulan/edit/'.$data->id);?>"
+								class="btn btn-primary btn-md" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Ubah"><i class="far fa-edit"></a></i> -->
+
+								<a onclick="deleteConfirm('<?php echo site_url('usulan/datausulan/delete/'.$data->id) ;?>')" 
+								class="btn btn-danger btn-md" href="#" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Hapus"><i class="fas fa-trash"></a></i>
+							
+							</div>
 							</td>
-							<td class="td-btn">
-								<a href="<?php echo site_url('usulan/datausulan/edit/'.$data->id);?>" class="btn btn-primary btn-sm"><i class="far fa-edit"></a></i>
-							</td>
-							<td class="td-btn">
-								<a onclick="deleteConfirm('<?php echo site_url('usulan/datausulan/delete/'.$data->id) ;?>')" class="btn btn-danger btn-sm" 
-								href="#"><i class="fas fa-trash"></a></i>
-							</td>
+							
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
@@ -146,35 +191,37 @@ HEREDOCS;
 	<script type="text/javascript">
     $(document).ready( function () {
         $('#table-1').DataTable();
-		} );
+
+		$('#bidang').change(function(){ 
+			var id=$(this).val();
+			$.ajax({
+				url : "<?php echo site_url('usulan/datausulan/getsubbidang');?>",
+				method : "POST",
+				data : {id: id},
+				async : true,
+				dataType : 'json',
+				success: function(data){
+					
+					var html = '';
+					var i;
+					for(i=0; i<data.length; i++){
+						html += '<option value='+data[i].id+'>'+data[i].nama_sub+'</option>';
+					}
+					$('#subbidang').html(html);
+
+				}
+			});
+			return false;
+
+		}); 	
+		
+	} );
 		
 		function deleteConfirm(url){
 		$('#btn-delete').attr('href', url);
 		$('#deleteModal').modal();
 		}
  
-	// <?php if($this->session->userdata('id') == $data->id){ ?>
-	
-	// 		$(document).ready(function(){
-		
-	// 			$("#btn-action").remove();
-		
-	// 			$(".td-btn").remove();
-		
-	// 		});
-	// <?php ?>
-		
-	// 	// <?php } else if($this->session->userdata('role') == "0"){ ?>
-		
-	// 	// 	$(document).ready(function(){
-		
-	// 	// 		$("#btn-action").remove();
-		
-	// 	// 		$(".td-btn").remove();
-		
-	// 	// 	});
-	
-	// <?php } else {}; ?>
  
   </script>
 </body>

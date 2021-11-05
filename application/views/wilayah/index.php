@@ -39,7 +39,7 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped hover" id="table-1">
+                <table class="table table-sm" id="table-1">
                     <thead>
                       <tr>
                         <th>Nomor </th>

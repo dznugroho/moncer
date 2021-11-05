@@ -49,7 +49,7 @@
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped hover" id="mytable">
+                <table class="table table-sm" id="mytable">
                     <thead>
                       <tr>
                         <th>No.</th>

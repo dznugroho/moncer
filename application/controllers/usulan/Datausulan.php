@@ -54,18 +54,11 @@ class Datausulan extends CI_Controller
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
 			$data['usulans']		= $this->usulan_model->getUsulan();
+			$data['bidangs']		= $this->bidang_model->getBidang();
 			$this->load->view('usulan_admin/index', $data);
+		}else{
+			return redirect('home');
 		}
-		elseif($this->session->userdata('role')=='2'){
-				$data['kecamatans']	= $this->wilayah_model->getKecamatan();
-				$data['desas']		= $this->wilayah_model->getDesa();
-				$data['usulans'] 	= $this->usulan_model->getUsulanDesa();
-				$this->load->view('usulan_desa/index', $data);
-			}
-			elseif($this->session->userdata('role')=='3'){
-					$data['usulans'] = $this->usulan_model->getUsulan();
-					$this->load->view('usulan/index', $data);
-				}
 	}
 
 	public function create()
@@ -75,51 +68,25 @@ class Datausulan extends CI_Controller
 			$data['subbidangs']			= $this->bidang_model->getSubbidang();
 			$data['kecamatans']			= $this->wilayah_model->getKecamatan();
 			$data['desas']				= $this->wilayah_model->getDesa();
+			$data['satuan']				= $this->usulan_model->getSatuan();
 	
 			$this->load->view('usulan_admin/create', $data);
 		}else{
-			if($this->session->userdata('role')=='2'){
-				$data['bidangs']		= $this->bidang_model->getBidang();
-				$data['subbidangs']		= $this->bidang_model->getSubbidang();
-				$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-				$data['desas']			= $this->wilayah_model->getDesa();
-
-				$this->load->view('usulan_desa/create', $data);
-			}else{
-				redirect('home');
-			}
+			
+			redirect('home');
+			
 		}
 	}
 
 	public function store()
 	{
 		$usulan		= $this->usulan_model;
-		$validation = $this->form_validation;
-		$validation->set_rules($usulan->rules());
-
-		if($validation->run() == FALSE){
-			if($this->session->userdata('role')=='1'){
-				$data['bidangs']			= $this->bidang_model->getBidang();
-				$data['subbidangs']			= $this->bidang_model->getSubbidang();
-				$data['kecamatans']			= $this->wilayah_model->getKecamatan();
-				$data['desas']				= $this->wilayah_model->getDesa();
-				
-				$this->load->view('usulan_admin/create', $data);
-			}
-			elseif($this->session->userdata('role')=='2'){
-				$data['bidangs']			= $this->bidang_model->getBidang();
-				$data['subbidangs']			= $this->bidang_model->getSubbidang();
-				$data['kecamatans']			= $this->wilayah_model->getKecamatan();
-				$data['desas']				= $this->wilayah_model->getDesa();
-				
-				$this->load->view('usulan_desa/create', $data);
-			}
-
-		}else{
+			
 			$usulan->save();
+			// print_r($usulan);
 			$this->session->set_flashdata('success', 'Data has been saved');
 			return redirect('usulan/datausulan');
-		}
+
 	}
 
 	public function edit($id=null)
@@ -131,20 +98,14 @@ class Datausulan extends CI_Controller
 			$data['subbidangs']		= $this->bidang_model->getSubbidang();
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
+			$data['satuan']			= $this->usulan_model->getSatuan();
+			$data["usulan"]			= $this->usulan_model->getUsulanById($id);
 			if(!$data["usulan"]) show_404();
 
 			$this->load->view("usulan_admin/edit", $data);
 
-		}elseif($this->session->userdata('role')=='2'){
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
-			if(!$data["usulan"]) show_404();
-
-			$this->load->view("usulan_desa/edit", $data);
+		}else{
+			return redirect('home');
 		}
 	}
 
@@ -153,58 +114,40 @@ class Datausulan extends CI_Controller
 		$post	= $this->input->post();
 		$usulan	= $this->usulan_model;
 		
-		$validation = $this->form_validation;
-		$validation->set_rules($usulan->rules());
+		$inputanggaran = $post["anggaran"];
+		$pagu_anggaran = $result = preg_replace("/[^0-9]/", "", $inputanggaran);
 
-		if($validation->run() == FALSE){
-			$id	= $this->uri->segment(3);
+		$id					= $post["id"];
+		$bidang_id			= $post["bidang"];
+		$subbidang_id		= $post["subbidang"];
+		$nama_kegiatan		= $post["nama_kegiatan"];
+		$thn_pengusulan		= $post["tahun_pengusulan"];
+		$jumlah_target		= $post["jumlah_target"];
+		$satuan_id			= $post["satuan_id"];
+		$anggaran			= $pagu_anggaran;
+		$hasil_kegiatan		= $post["hasil_kegiatan"];
+		$kecamatan_id		= $post["kecamatan"];
+		$desa_id			= $post["desa"];
+		$alamat_kegiatan	= $post["alamat_kegiatan"];
+		$nama_pengusul		= $post["nama_pengusul"];
+		$status_pengajuan	= 1;
+		$id_pengusul		= $this->session->userdata('id');
 
-			if($this->session->userdata('role')=='1'){
-				$data['bidangs']		= $this->bidang_model->getBidang();
-				$data['subbidangs']		= $this->bidang_model->getSubbidang();
-				$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-				$data['desas']			= $this->wilayah_model->getDesa();
-				$data["usulan"] 		= $usulan->getById($id);
-				
-				$this->load->view('usulan_admin/create', $data);
-			}
-			elseif($this->session->userdata('role')=='2'){
-				$data['bidangs']		= $this->bidang_model->getBidang();
-				$data['subbidangs']		= $this->bidang_model->getSubbidang();
-				$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-				$data['desas']			= $this->wilayah_model->getDesa();
-				$data["usulan"] 		= $usulan->getById($id);
-				
-				$this->load->view('usulan_desa/create', $data);
-			}
-			
-		}else{
-
-			$id					= $post["id"];
-			$bidang_id			= $post["bidang"];
-			$subbidang_id		= $post["subbidang"];
-			$tahun_pengusulan	= $post["tahun_pengusulan"];
-			$nama_kegiatan		= $post["nama_kegiatan"];
-			$anggaran			= $post["anggaran"];
-			$kecamatan_id		= $post["kecamatan"];
-			$desa_id			= $post["desa"];
-			$alamat_kegiatan	= $post["alamat_kegiatan"];
-			$deskripsi			= $post["deskripsi"];
-			$nama_pengusul		= $post["nama_pengusul"];
-			$id_pengusul		= $this->session->userdata('id');
-	
-			if (!empty($_FILES["file"]["name"])) {
-				$file 			= $usulan->uploadFile();
-			} else {
-				$file 			= $post["old_file"];
-			}
-
-			$usulan->update($id,$bidang_id,$subbidang_id,$tahun_pengusulan,
-							$nama_kegiatan,$anggaran,$kecamatan_id,$desa_id,$alamat_kegiatan,$deskripsi,
-							$nama_pengusul,$id_pengusul,$file);
-			$this->session->set_flashdata('success', 'Data has been updated');
-			return redirect('usulan/datausulan');
+		if (!empty($_FILES["file"]["name"])) {
+			$file 			= $usulan->uploadFile();
+		} else {
+			$file 			= $post["old_file"];
 		}
+
+		$usulan->update($id,$bidang_id,$subbidang_id,$nama_kegiatan,
+						$thn_pengusulan,$jumlah_target,$satuan_id,$anggaran,
+						$hasil_kegiatan,$kecamatan_id,$desa_id,
+						$alamat_kegiatan,$nama_pengusul,$status_pengajuan,
+						$id_pengusul,$file);
+		$this->session->set_flashdata('success', 'Data has been updated');
+		return redirect('usulan/datausulan');
+		// print_r($usulan);
+		
 	}
 
 	public function show($id=null)
@@ -216,31 +159,26 @@ class Datausulan extends CI_Controller
 			$data['subbidangs']		= $this->bidang_model->getSubbidang();
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
+			$data['satuan']			= $this->usulan_model->getSatuan();
+			$data["usulan"]			= $this->usulan_model->getUsulanById($id);
 			if(!$data["usulan"]) show_404();
 
 			$this->load->view("usulan_admin/detail", $data);
 
-		}elseif($this->session->userdata('role')=='2'){
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
-			if(!$data["usulan"]) show_404();
-
-			$this->load->view("usulan_desa/detail", $data);
-		
-		}elseif($this->session->userdata('role')=='3'){
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
-			if(!$data["usulan"]) show_404();
-
-			$this->load->view("usulan/detail", $data);
+		}else{
+			return redirect('home');
 		}
+	}
+
+	public function cari()
+	{
+		$data['kecamatans']		= $this->wilayah_model->getKecamatan();
+		$data['desas']			= $this->wilayah_model->getDesa();
+		$data['bidangs']		= $this->bidang_model->getBidang();
+		$data['satuan']			= $this->usulan_model->getSatuan();
+		$data['usulans']		= $this->usulan_model->cariData();
+		$this->load->view('usulan_admin/index', $data);
+
 	}
 
 	public function delete($id=null)

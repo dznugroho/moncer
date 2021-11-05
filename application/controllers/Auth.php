@@ -18,14 +18,17 @@ class Auth extends CI_Controller
 
 	public function login()
 	{
-		$this->form_validation->set_rules('username','Username','required');
-		$this->form_validation->set_rules('password','Password','required');
+		$this->form_validation->set_rules('username','Username','required',
+							array('required' => 'Silahkan Masukkan %s.'));
+		$this->form_validation->set_rules('password','Password','required',
+							array('required' => 'Silahkan Masukkan %s.'));
 
 		if($this->form_validation->run() == FALSE){
-			$errors = $this->form_validation->error_array();
-			$this->session->set_flashdata('errors',$errors);
-			$this->session->set_flashdata('input',$this->input->post());
-			redirect('auth');
+			// $errors = $this->form_validation->error_array();
+			// $this->session->set_flashdata('errors',$errors);
+			// $this->session->set_flashdata('input',$this->input->post());
+			// redirect('auth');
+			$this->load->view('auth/login');
 			
 		}else{
 			$username	= htmlspecialchars($this->input->post('username'));
@@ -50,7 +53,7 @@ class Auth extends CI_Controller
 					redirect('home');
 					
 				}else{
-					$this->session->set_flashdata('error_login', 'Username atau Password yang Anda masukkan salah');
+					$this->session->set_flashdata('error_login', 'Password yang Anda masukkan salah');
 					// print_r($cek_login);
 					redirect('auth');
 				}	
@@ -63,47 +66,47 @@ class Auth extends CI_Controller
 		$this->load->view('auth/register');
 	}
 
-	public function register()
-	{
-		$this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
-		$this->form_validation->set_rules('name', 'Nama', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|is_unique[users.email]|valid_email');
-        $this->form_validation->set_rules('password', 'Password', 'required|trim');
-        $this->form_validation->set_rules('confrim_password', 'Konfirmasi Password', 'required|trim|matches[password]');
-        $this->form_validation->set_rules('role', 'Role', 'required');
+	// public function register()
+	// {
+	// 	$this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
+	// 	$this->form_validation->set_rules('name', 'Nama', 'required');
+    //     $this->form_validation->set_rules('email', 'Email', 'required|is_unique[users.email]|valid_email');
+    //     $this->form_validation->set_rules('password', 'Password', 'required|trim');
+    //     $this->form_validation->set_rules('confrim_password', 'Konfirmasi Password', 'required|trim|matches[password]');
+    //     $this->form_validation->set_rules('role', 'Role', 'required');
  
-        if ($this->form_validation->run() == FALSE) {
+    //     if ($this->form_validation->run() == FALSE) {
  
-            $errors = $this->form_validation->error_array();
-            $this->session->set_flashdata('errors', $errors);
-            $this->session->set_flashdata('input', $this->input->post());
-            redirect('auth/register');
+    //         $errors = $this->form_validation->error_array();
+    //         $this->session->set_flashdata('errors', $errors);
+    //         $this->session->set_flashdata('input', $this->input->post());
+    //         redirect('auth/register');
  
-        } else {
+    //     } else {
  
-            $name = $this->input->post('name');
-            $email = $this->input->post('email');
-            $password = $this->input->post('password');
-            $pass = password_hash($password, PASSWORD_DEFAULT);
-            $role = $this->input->post('role');
+    //         $name = $this->input->post('name');
+    //         $email = $this->input->post('email');
+    //         $password = $this->input->post('password');
+    //         $pass = password_hash($password, PASSWORD_DEFAULT);
+    //         $role = $this->input->post('role');
  
-            $data = [
-                'name' => $name,
-                'email' => $email,
-                'password' => $pass,
-                'role' => $role
-            ];
+    //         $data = [
+    //             'name' => $name,
+    //             'email' => $email,
+    //             'password' => $pass,
+    //             'role' => $role
+    //         ];
  
-            $insert = $this->auth_model->register("users", $data);
+    //         $insert = $this->auth_model->register("users", $data);
  
-            if($insert){
+    //         if($insert){
  
-                $this->session->set_flashdata('success_login', 'Sukses, Anda berhasil register. Silahkan login sekarang.');
-                redirect('auth');
+    //             $this->session->set_flashdata('success_login', 'Sukses, Anda berhasil register. Silahkan login sekarang.');
+    //             redirect('auth');
  
-            }
-        }
-	}
+    //         }
+    //     }
+	// }
 
 	public function logout()
 	{

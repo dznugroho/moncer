@@ -7,6 +7,8 @@ class Datausulan extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('usulan_model');
+		$this->load->model('csr_model');
+		$this->load->model('perusahaan_model');
 		$this->load->model('wilayah_model');
 		$this->load->model('bidang_model');
 		$this->load->library('form_validation');
@@ -16,86 +18,86 @@ class Datausulan extends CI_Controller
 
 	}
 
-	public function index()
-	{
-		$data['kecamatans']	= $this->wilayah_model->getKecamatan();
-		$data['desas']		= $this->wilayah_model->getDesa();
-		$data['usulans'] 	= $this->usulan_model->getUsulan();
-
-		$this->load->view('usulan/index', $data);
-			
+	function getsubbidang(){
+		$id = $this->input->post('id',TRUE);
+		$data = $this->bidang_model->getSubbidangID($id)->result();
+		echo json_encode($data);
 	}
-
+	
 	public function embed()
     {
         $file = $this->uri->segment(4);
         echo "<embed src='".base_url('upload/file/'.$file)."' width='100%' height='100%'></embed>";
 	}
-	
-	public function update()
-	{	
-		$post		= $this->input->post();
-		$usulan		= $this->usulan_model;
-		
-		$validation = $this->form_validation;
-		$validation->set_rules($usulan->rules());
 
-		if($validation->run() == FALSE){
-			
-			$id						= $this->uri->segment(3);
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"] 		= $usulan->getById($id);
-			
-			$this->load->view('usulan/create', $data);
-			
-		}else{
+	public function index()
+	{
+		$data['kecamatans']		= $this->wilayah_model->getKecamatan();
+		$data['desas']			= $this->wilayah_model->getDesa();
+		$data['usulans'] 		= $this->usulan_model->getUsulan();
+		$data['bidangs']		= $this->bidang_model->getBidang();
 
-			$id					= $post["id"];
-			$bidang_id			= $post["bidang"];
-			$subbidang_id		= $post["subbidang"];
-			$tahun_pengusulan	= $post["tahun_pengusulan"];
-			$nama_kegiatan		= $post["nama_kegiatan"];
-			$waktu_mulai		= $post["waktu_mulai"];
-			$waktu_selesai		= $post["waktu_selesai"];
-			$anggaran			= $post["anggaran"];
-			$kecamatan_id		= $post["kecamatan"];
-			$desa_id			= $post["desa"];
-			$alamat_kegiatan	= $post["alamat_kegiatan"];
-			$deskripsi			= $post["deskripsi"];
-			$nama_institusi		= $post["nama_institusi"];
-			$alamat_institusi	= $post["alamat_institusi"];
-			$id_pengusul		= $this->session->userdata('id');
-	
-			if (!empty($_FILES["file"]["name"])) {
-				$file 			= $usulan->uploadFile();
-			} else {
-				$file 			= $post["old_file"];
-			}
-
-			$usulan->update($id,$bidang_id,$subbidang_id,$tahun_pengusulan,
-							$nama_kegiatan,$waktu_mulai,$waktu_selesai,$anggaran,
-							$kecamatan_id,$desa_id,$alamat_kegiatan,$deskripsi,
-							$nama_institusi,$alamat_institusi,$id_pengusul,$file);
-			$this->session->set_flashdata('success', 'Data has been updated');
-			return redirect('desa/pengajuan_usulan');
-		}
+		$this->load->view('perusahaan/usulan_index', $data);
+			
 	}
 
-	public function show($id=null)
+	public function cari()
 	{
-		if(!isset($id)) redirect('desa/pengajuan_usulan');
+		$data['kecamatans']		= $this->wilayah_model->getKecamatan();
+		$data['desas']			= $this->wilayah_model->getDesa();
+		$data['bidangs']		= $this->bidang_model->getBidang();
+		$data['satuan']			= $this->usulan_model->getSatuan();
+		$data['usulans']		= $this->usulan_model->cariData();
+		$this->load->view('perusahaan/usulan_index', $data);
 
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
-			if(!$data["usulan"]) show_404();
+	}
+	
+	public function pilihkegiatan()
+	{	
+		$post			= $this->input->post();
+		$usulan_id		= $post["usulan_id"];
+		$perusahaan_id	= $this->session->userdata('id');
+		
+		$cek_datacsr	= $this->csr_model->cekDataCSR($usulan_id,$perusahaan_id);
+ 
+        if($cek_datacsr->num_rows() > 0){
+			$post			= $this->input->post();
+			$usulan_id		= $post["usulan_id"];
+			$perusahaan_id	= $this->session->userdata('id');
 
-			$this->load->view("usulan/detail", $data);
+			$this->csr_model->deleteCSR($usulan_id,$perusahaan_id);
+			$this->usulan_model->savePilihKegiatan();
+			$this->usulan_model->updateStatusPendanaan($usulan_id);
+
+			$this->session->set_flashdata('success', 'Kegiatan berhasil dipilih');
+			return redirect('perusahaan/datausulan');
+		
+		}else {
+			$post			= $this->input->post();
+			$usulan_id		= $post["usulan_id"];
+
+			$this->usulan_model->savePilihKegiatan();
+			$this->usulan_model->updateStatusPendanaan($usulan_id);
+
+			$this->session->set_flashdata('success', 'Kegiatan berhasil dipilih');
+			return redirect('perusahaan/datausulan');
+		}
+		
+		
+	}
+
+	public function pilih($id=null)
+	{
+		if(!isset($id)) redirect('perusahaan/datausulan');
+
+		$data['bidangs']		= $this->bidang_model->getBidang();
+		$data['subbidangs']		= $this->bidang_model->getSubbidang();
+		$data['kecamatans']		= $this->wilayah_model->getKecamatan();
+		$data['desas']			= $this->wilayah_model->getDesa();
+		$data['satuan']			= $this->usulan_model->getSatuan();
+		$data["usulan"]			= $this->usulan_model->getUsulanById($id);
+
+		$this->load->view("perusahaan/pilih_kegiatan", $data);
 		
 	}
 

@@ -103,6 +103,10 @@ class CI_Controller {
 	public function cek_status()
 	{
 		$this->load->library('session');
+		$this->session->sess_expiration = '7200';
+		// if($this->session->sess_expiration >= 1000){
+		// 	redirect('auth');
+		// }
 		if($this->session->userdata('id') == NULL){
 			$this->session->set_flashdata('error_login', 'Silahkan login terlebih dahulu untuk mengakses data.');
 			redirect('auth');

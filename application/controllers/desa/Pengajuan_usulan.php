@@ -66,6 +66,7 @@ class Pengajuan_usulan extends CI_Controller
 		$data['subbidangs']		= $this->bidang_model->getSubbidang();
 		$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 		$data['desas']			= $this->wilayah_model->getDesa();
+		$data['satuan']			= $this->usulan_model->getSatuan();
 
 		$this->load->view('usulan_desa/create', $data);
 				
@@ -74,23 +75,11 @@ class Pengajuan_usulan extends CI_Controller
 	public function store()
 	{
 		$usulan		= $this->usulan_model;
-		$validation = $this->form_validation;
-		$validation->set_rules($usulan->rules());
-
-		if($validation->run() == FALSE){
-
-			$data['bidangs']			= $this->bidang_model->getBidang();
-			$data['subbidangs']			= $this->bidang_model->getSubbidang();
-			$data['kecamatans']			= $this->wilayah_model->getKecamatan();
-			$data['desas']				= $this->wilayah_model->getDesa();
-			
-			$this->load->view('usulan_desa/create', $data);
-
-		}else{
-			$usulan->save();
-			$this->session->set_flashdata('success', 'Data has been saved');
-			return redirect('desa/pengajuan_usulan');
-		}
+		$usulan->save();
+		$this->session->set_flashdata('success', 'Data has been saved');
+		return redirect('desa/pengajuan_usulan');
+		// print_r($usulan);
+		
 	}
 
 	public function edit($id=null)
@@ -101,7 +90,8 @@ class Pengajuan_usulan extends CI_Controller
 			$data['subbidangs']		= $this->bidang_model->getSubbidang();
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
+			$data["usulan"]			= $this->usulan_model->getUsulanById($id);
+			$data['satuan']			= $this->usulan_model->getSatuan();
 			if(!$data["usulan"]) show_404();
 
 			$this->load->view("usulan_desa/edit", $data);
@@ -110,54 +100,43 @@ class Pengajuan_usulan extends CI_Controller
 
 	public function update()
 	{	
-		$post		= $this->input->post();
-		$usulan		= $this->usulan_model;
+		$post	= $this->input->post();
+		$usulan	= $this->usulan_model;
 		
-		$validation = $this->form_validation;
-		$validation->set_rules($usulan->rules());
+		$inputanggaran = $post["anggaran"];
+		$pagu_anggaran = $result = preg_replace("/[^0-9]/", "", $inputanggaran);
 
-		if($validation->run() == FALSE){
-			
-			$id						= $this->uri->segment(3);
-			$data['bidangs']		= $this->bidang_model->getBidang();
-			$data['subbidangs']		= $this->bidang_model->getSubbidang();
-			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
-			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"] 		= $usulan->getById($id);
-			
-			$this->load->view('usulan_desa/create', $data);
-			
-		}else{
+		$id					= $post["id"];
+		$bidang_id			= $post["bidang"];
+		$subbidang_id		= $post["subbidang"];
+		$nama_kegiatan		= $post["nama_kegiatan"];
+		$thn_pengusulan		= $post["tahun_pengusulan"];
+		$jumlah_target		= $post["jumlah_target"];
+		$satuan_id			= $post["satuan_id"];
+		$anggaran			= $pagu_anggaran;
+		$hasil_kegiatan		= $post["hasil_kegiatan"];
+		$kecamatan_id		= $post["kecamatan"];
+		$desa_id			= $post["desa"];
+		$alamat_kegiatan	= $post["alamat_kegiatan"];
+		$nama_pengusul		= $post["nama_pengusul"];
+		$status_pengajuan	= 1;
+		$id_pengusul		= $this->session->userdata('id');
 
-			$id					= $post["id"];
-			$bidang_id			= $post["bidang"];
-			$subbidang_id		= $post["subbidang"];
-			$tahun_pengusulan	= $post["tahun_pengusulan"];
-			$nama_kegiatan		= $post["nama_kegiatan"];
-			$waktu_mulai		= $post["waktu_mulai"];
-			$waktu_selesai		= $post["waktu_selesai"];
-			$anggaran			= $post["anggaran"];
-			$kecamatan_id		= $post["kecamatan"];
-			$desa_id			= $post["desa"];
-			$alamat_kegiatan	= $post["alamat_kegiatan"];
-			$deskripsi			= $post["deskripsi"];
-			$nama_institusi		= $post["nama_institusi"];
-			$alamat_institusi	= $post["alamat_institusi"];
-			$id_pengusul		= $this->session->userdata('id');
-	
-			if (!empty($_FILES["file"]["name"])) {
-				$file 			= $usulan->uploadFile();
-			} else {
-				$file 			= $post["old_file"];
-			}
-
-			$usulan->update($id,$bidang_id,$subbidang_id,$tahun_pengusulan,
-							$nama_kegiatan,$waktu_mulai,$waktu_selesai,$anggaran,
-							$kecamatan_id,$desa_id,$alamat_kegiatan,$deskripsi,
-							$nama_institusi,$alamat_institusi,$id_pengusul,$file);
-			$this->session->set_flashdata('success', 'Data has been updated');
-			return redirect('desa/pengajuan_usulan');
+		if (!empty($_FILES["file"]["name"])) {
+			$file 			= $usulan->uploadFile();
+		} else {
+			$file 			= $post["old_file"];
 		}
+
+		$usulan->update($id,$bidang_id,$subbidang_id,$nama_kegiatan,
+						$thn_pengusulan,$jumlah_target,$satuan_id,$anggaran,
+						$hasil_kegiatan,$kecamatan_id,$desa_id,
+						$alamat_kegiatan,$nama_pengusul,$status_pengajuan,
+						$id_pengusul,$file);
+		$this->session->set_flashdata('success', 'Data has been updated');
+		return redirect('desa/pengajuan_usulan');
+		// print_r($usulan);
+	
 	}
 
 	public function show($id=null)
@@ -168,7 +147,8 @@ class Pengajuan_usulan extends CI_Controller
 			$data['subbidangs']		= $this->bidang_model->getSubbidang();
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
-			$data["usulan"]			= $this->usulan_model->getById($id);
+			$data["usulan"]			= $this->usulan_model->getUsulanById($id);
+			$data['satuan']			= $this->usulan_model->getSatuan();
 			if(!$data["usulan"]) show_404();
 
 			$this->load->view("usulan_desa/detail", $data);

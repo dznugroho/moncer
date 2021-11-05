@@ -59,7 +59,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped hover" id="mytable">
+                <table class="table table-sm" id="mytable">
                     <thead>
                       <tr>
                         <th>No.</th>
@@ -70,7 +70,7 @@
                         <th>Desa</th>
                         <th>Alamat</th>
                         <th>No. Telp</th>
-                        <th id="btn-action" width="60px">Action</th>
+                        <th id="btn-action">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -91,9 +91,15 @@
 							<td><?= $data->no_telp;?></td>
 							</td>
 							<td class="td-btn">
-							<a href="<?php echo site_url('user/perusahaan/edit/'.$data->id);?>" class="btn btn-primary btn-sm"><i class="far fa-edit"></a></i>
-							<a onclick="deleteConfirm('<?php echo site_url('user/perusahaan/delete/'.$data->id) ;?>')" class="btn btn-danger btn-sm" 
-								href="#"><i class="fas fa-trash"></a></i>
+							<div class="btn-group mb-3 btn-group-sm" role="group" aria-label="Basic example">
+
+							<a href="<?php echo site_url('user/perusahaan/edit/'.$data->id);?>" 
+							class="btn btn-primary btn-md" data-toggle="tooltip" data-placement="top"
+							title="" data-original-title="Ubah"><i class="far fa-edit"></a></i>
+							
+							<a onclick="deleteConfirm('<?php echo site_url('user/perusahaan/delete/'.$data->id) ;?>')" 
+							class="btn btn-danger btn-md" href="#" data-toggle="tooltip" data-placement="top"
+							title="" data-original-title="Hapus"><i class="fas fa-trash"></a></i>
 							</td>
 						</tr>
 					<?php endforeach; ?>
