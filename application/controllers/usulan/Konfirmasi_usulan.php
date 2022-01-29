@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script allowed');
 
-class Validasi_usulan extends CI_Controller
+class Konfirmasi_usulan extends CI_Controller
 {
 	public function __construct()
 	{
@@ -22,13 +22,13 @@ class Validasi_usulan extends CI_Controller
 			$data['desas']			= $this->wilayah_model->getDesa();
 			$data['usulans']		= $this->usulan_model->getValidasi();
 			$data['satuan']			= $this->usulan_model->getSatuan();
-			$this->load->view('usulan_admin/validasi_usulan', $data);
+			$this->load->view('usulan_admin/konfirmasi_usulan', $data);
 		}
 	}
 
 	public function show($id=null)
 	{
-		if(!isset($id)) redirect('usulan_admin/validasi_usulan');
+		if(!isset($id)) redirect('usulan_admin/konfirmasi_usulan');
 
 		if($this->session->userdata('role')=='1'){
 			$data['bidangs']		= $this->bidang_model->getBidang();
@@ -57,7 +57,7 @@ class Validasi_usulan extends CI_Controller
 			
 			$usulan->validasi_usulan($id,$status_pengajuan,$ket_pengajuan);
 			$this->session->set_flashdata('success', 'Data has been updated');
-			return redirect('usulan/validasi_usulan');
+			return redirect('usulan/konfirmasi_usulan');
 			
 		}
 	}

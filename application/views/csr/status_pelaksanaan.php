@@ -19,7 +19,7 @@
 <div class="main-content">
 <section class="section">
     <div class="section-header">
-      <h1>Validasi Laporan CSR</h1>
+      <h1>Status Pelaksanaan CSR</h1>
 			<?php $this->load->view('include/breadcrumb.php') ?>
     </div>
 
@@ -48,7 +48,7 @@
 		<?php endif;?>
 		<div class="row"> 
           <div class="form-group col-3">
-		<form action="<?php echo site_url('csr/validasi_laporan/cari'); ?>" method=POST>
+		<form action="<?php echo site_url('csr/status_pelaksanaan/cari'); ?>" method=POST>
 
             <select class="form-control" name="bidang" id="bidang">
               <option value="">--Pilih Bidang--</option>
@@ -63,7 +63,6 @@
 			<option value="">--Pilih Status--</option>
 			<option value="1">Belum Terlapor</option>
 			<option value="2">Terlapor</option>
-			<option value="3">Revisi</option>
 			</select>
 		  </div>
 		  <!-- <div class="form-group col-3">
@@ -78,8 +77,15 @@
 			</select>
 		  </div>
 		  <div class="form-group col-3">
-			<button class="btn btn-icon icon-left btn-primary" type="submit"><i class="fa fa-search"></i></button>
-			<a href="<?php echo site_url('csr/validasi_laporan'); ?>" class="btn btn-icon icon-left btn-danger" ><i class="fas fa-sync"></i> Reset</a>
+		    <div class="btn-group mb-3 btn-group-md" role="group" aria-label="Basic example">
+			<button class="btn btn-icon icon-left btn-primary" type="submit" data-toggle="tooltip"
+                data-placement="top" title="" data-original-title="Cari / Print"><i class="fa fa-search"></i>
+            </button>
+			<a href="<?php echo site_url('csr/status_pelaksanaan'); ?>" class="btn btn-icon icon-left btn-danger" 
+			    data-toggle="tooltip"data-placement="top" title="" data-original-title="Reset">
+			    <i class="fas fa-sync"></i>
+			</a>
+			</div>
 		</form>
 		  </div>
 
@@ -95,7 +101,8 @@
                       <tr>
 					  	<th>No.</th>
                         <th id="btn-action" >Action</th>
-                        <th>Status Validasi</th>
+                        <th>Konfirmasi Desa</th>
+                        <th>Status Laporan</th>
 						<th>Perusahaan Pelaksana CSR</th>
                         <th>Penanggung Jawab CSR</th>
 						<th>Anggaran Dana CSR</th>
@@ -129,19 +136,29 @@
 							<td><?php echo $no;?></td>
 							<td class="td-btn">
 								<button data-toggle="modal" data-target="#statusDana<?php echo $data->csr_id;?>" 
-								class="btn btn-primary btn-sm"> Validasi</button>
+								class="btn btn-primary btn-sm"> Konfirmasi</button>
 							</td>
 							<?php
 								foreach($laporan as $item):
 									if ($data->id == $item->usulan_id) {
 							?>
 							
+							<td><?php if ($item->konfirmasi_desa == 1){
+									echo '<div class="badge badge-warning" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Belum ada konfirmasi"><i class="far fa-hourglass"></i>
+								</div>';
+								}elseif ($item->konfirmasi_desa == 2){
+									echo '<div class="badge badge-danger" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Belum Terlaksana"><i class="fas fa-times"></i></div>';
+								}else{
+									echo '<div class="badge badge-success" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Terlaksana"><i class="fas fa-check"></i></div>';
+								};?>
+							</td>
 							<td><?php if ($item->status_validasi == 1){
 									echo '<div class="badge badge-dark">Belum Terlapor</div>';
 								}elseif ($item->status_validasi == 2){
 									echo '<div class="badge badge-info">Terlapor</div>';
-								}elseif ($item->status_validasi == 3){
-									echo '<div class="badge badge-warning">Revisi</div>';
 								}else{
 									echo '<div class="badge badge-success">Valid</div>';
 								};?>
@@ -179,7 +196,7 @@
 									data-placement="top" title="" data-original-title="Laporan Belum Diupload">
 									<i class="fas fa-times"></i></div>';
 							}else{?>
-								<button onclick='open("<?php echo site_url('csr/validasi_laporan/embed/'.$item->file_laporan);?>",
+								<button onclick='open("<?php echo site_url('csr/status_pelaksanaan/embed/'.$item->file_laporan);?>",
 								"displayWindow","width=700,height=600,status=no,toolbar=no,menubar=no,left=355");'
 								class="btn btn-info btn-sm tooltip-info" data-toggle="tooltip" data-placement="top" 
 								title="" data-original-title="Lihat Data">LihatFile</button>
@@ -201,7 +218,7 @@
 							<?php }endforeach;?>
 							
 							<!-- <td class="td-btn">
-								<a href="<?php echo site_url('csr/validasi_laporan/show/'.$data->id);?>" class="btn btn-info btn-sm"> Detail</a>
+								<a href="<?php echo site_url('csr/status_pelaksanaan/show/'.$data->id);?>" class="btn btn-info btn-sm"> Detail</a>
 							</td> -->
                             <td>===</td>
 							
@@ -235,30 +252,31 @@
             <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_edit">Validasi Laporan Kegiatan</h5>
+                <h5 class="modal-title" id="modal_edit">Konfirmasi Laporan CSR</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form class="form-horizontal" method="post" action="<?php echo base_url('csr/validasi_laporan/validasilaporan')?>">
+            <form class="form-horizontal" method="post" action="<?php echo base_url('csr/status_pelaksanaan/validasilaporan')?>">
 			  <div class="modal-body">
-			  	<div class="form-group">
-					<label>Validasi Status</label>
-					<select class="form-control" name="status_validasi" id="status_validasi">
-						<option selected disabled>--Pilih Status---</option>
-						<option value="2">Terlapor</option>
-						<option value="3">Revisi</option>
-						<option value="4">Valid</option>
-					</select>
-				</div>
-				<div class="form-group">
-                    <label for="">Keterangan</label>
-					<textarea class="form-control" name="ket_validasi" value=""></textarea>
-				</div>
+			    <input type="hidden" name="status_validasi" value="3">
+			    <input type="hidden" name="csr_id" value="<?php echo $row->csr_id;?>">
+			    Apakah anda yakin ingin mengkonfirmasi?
+			 <!-- 	<div class="form-group">-->
+				<!--	<label>Validasi Status</label>-->
+				<!--	<select class="form-control" name="status_validasi" id="status_validasi">-->
+				<!--		<option selected disabled>--Pilih Status---</option>-->
+				<!--		<option value="4">Valid</option>-->
+				<!--	</select>-->
+				<!--</div>-->
+				<!--<div class="form-group">-->
+    <!--                <label for="">Keterangan</label>-->
+				<!--	<textarea class="form-control" name="ket_validasi" value=""></textarea>-->
+				<!--</div>-->
 			  </div>
-                <input type="hidden" name="csr_id" value="<?php echo $row->csr_id;?>">
+                
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">Konfirmasi</button>
                     <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Batal</button>
                 </div>
             </form>

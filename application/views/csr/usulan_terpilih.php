@@ -19,7 +19,7 @@
 <div class="main-content">
 <section class="section">
     <div class="section-header">
-      <h1>Data Usulan</h1>
+      <h1>Data Usulan Terpilih</h1>
 			<?php $this->load->view('include/breadcrumb.php') ?>
     </div>
 
@@ -47,15 +47,24 @@
 			</div>
 		<?php endif;?>
           <div class="card">
+		  
+		  
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-sm" id="mytable">
+                <table class="table table-sm" id="table-1">
                     <thead>
                       <tr>
-                        <th>No.</th>
-                        <th>Action</th>
-                        <th>Status Pengajuan</th>
-                        <th>Nama Bidang</th>
+					  	<th>No.</th>
+                        <th id="btn-action" >Action</th>
+                        <th>Status Konfirmasi</th>
+						<th>Perusahaan Pelaksana CSR</th>
+						<th>Penanggung Jawab CSR</th>
+						<th>Anggaran Dana CSR</th>
+						<th>Rencana Target</th>
+						<th>Tanggal Rencana Mulai</th>
+						<th>Tanggal Rencana Selesai</th>
+                        <th>===</th>
+					  	<th>Nama Bidang</th>
                         <th>Nama Subbidang</th>
                         <th>Tahun Pengusulan</th>
                         <th>Nama Kegiatan</th>
@@ -64,7 +73,7 @@
                         <th>Target</th>
                         <th>Lokasi Kegiatan</th>
                         <th>Institusi Pengusul</th>
-                        <th>File</th>
+                       
                       </tr>
                     </thead>
                     <tbody>
@@ -76,21 +85,33 @@
 						<tr>
 							<td><?php echo $no;?></td>
 							<td class="td-btn">
-								<button data-toggle="modal" data-target="#validasiModal<?php echo $data->id;?>" 
-								class="btn btn-primary btn-sm"> Validasi</button>
+								<button data-toggle="modal" data-target="#validasiStatus<?php echo $data->csr_id;?>" 
+								class="btn btn-primary btn-sm"> Konfirmasi</button>
 							</td>
-							<td>
-								<?php if ($data->status_pengajuan == '1'){
+							<td><?php if ($data->status_csr == "1"){
 									echo '<div class="badge badge-warning">Proses</div>';
-
-								}else if ($data->status_pengajuan == '2'){
-									echo '<div class="badge badge-success">Setuju</div>';
-
-								}else if ($data->status_pengajuan == '3'){
-									echo '<div class="badge badge-danger">Tolak</div>';
-								}
-								;?>
+								}else{
+									echo '<div class="badge badge-success">Diterima</div>';
+								};?>
 							</td>
+							<?php
+								foreach($csr as $item):
+									if ($data->id == $item->usulan_id) {
+							?>
+							
+							<td><?php echo $item->name;?></td>
+							<td><?php echo strtoupper($item->penanggung_jawab);?></td>
+							<td><?php echo 'Rp.'.number_format($item->dana);?></td>
+							<td><?php echo $item->jumlah_target.'&nbsp;'.$data->nama_satuan; ?></td>
+							<td><?php echo $item->tgl_mulai;?></td>
+							<td><?php echo $item->tgl_selesai;?></td>
+							
+							<?php }endforeach;?>
+                            <td>===</td>
+							<!-- <td class="td-btn">
+								<a href="<?php echo site_url('csr/usulan_terpilih/show/'.$data->id);?>" class="btn btn-info btn-sm"> Detail</a>
+							</td> -->
+							
 							<td><?php echo $data->nama_bidang;?></td>
                             <td><?php echo $data->nama_sub;?></td>
                             <td><?php echo $data->thn_pengusulan;?></td>
@@ -100,21 +121,7 @@
 							<td><?php echo $data->jumlah_target.'&nbsp;'.$data->nama_satuan; ?></td>
 							<td><?php echo $data->alamat_kegiatan;?></td>
                             <td><?php echo $data->name;?></td>
-							<td><?php if($data->file=="default.pdf" OR $data->file==""){
-								echo "Proposal belum diupload";
-							}else{?>
-								<button onclick='open("<?php echo site_url('usulan/datausulan/embed/'.$data->file);?>",
-								"displayWindow","width=700,height=600,status=no,toolbar=no,menubar=no,left=355");'
-								class="btn btn-info btn-sm tooltip-info" data-toggle="tooltip" data-placement="top" 
-								title="" data-original-title="Lihat Data">LihatFile</button>
-							<?php } ?>
-
-							</td>
-							
-							<!-- <td class="td-btn">
-								<a href="<?php echo site_url('usulan/validasi_usulan/show/'.$data->id);?>" class="btn btn-info btn-md"> Detail</a>
-							</td> -->
-                    							
+                           
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
@@ -129,39 +136,27 @@
 </div>
 
 <?php
-	foreach ($usulans as $row):
+	foreach ($csr as $row):
 ?>
-<div class="modal fade" id="validasiModal<?php echo $row->id;?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+<div class="modal fade" id="validasiStatus<?php echo $row->csr_id;?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modal_edit">Validasi Usulan</h4>
+                <h5 class="modal-title" id="modal_edit">Konfirmasi Dana CSR</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form class="form-horizontal" method="post" action="<?php echo base_url('usulan/validasi_usulan/validasi')?>">
+            <form class="form-horizontal" method="post" action="<?php echo base_url('csr/usulan_terpilih/validasidana')?>">
 			  <div class="modal-body">
-			  	<div class="form-group">
-					<label>Status Pengajuan</label>
-					<select class="form-control" name="status_pengajuan" id="status_pengajuan">
-						<option selected disabled>--Pilih Status--</option>
-						<option value="2">Terima</option>
-						<option value="3">Tolak</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-xs-3">Keterangan</label>
-					<div class="col-xs-8">
-                    	<input name="id" value="<?php echo $row->id;?>" class="form-control" type="hidden">
-						<textarea class="form-control" name="ket_pengajuan" placeholder="Keterangan data yang belum tercukupi ..."></textarea>
-					</div>
-				</div>
+			      Apakah anda yakin ingin mengkonfirmasi?
 			  </div>
-                <input name="status" class="form-control" type="hidden" value="3">
+				<input type="hidden" class="form-control" name="status_csr" value="2">
+			  	<input type="hidden" name="usulan_id" value="<?php echo $row->usulan_id;?>">
+                <input type="hidden" name="csr_id" value="<?php echo $row->csr_id;?>">
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Validasi</button>
-                    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Batal</button>
                 </div>
             </form>
             </div>
@@ -180,18 +175,15 @@
   <script src="<?= base_url('assets/modules/select.bootstrap4.min.js')?>"></script>
 	
   <script src="<?= base_url('assets/js/page/modules-datatables.js')?>"></script>
-	
 
 	<script type="text/javascript">
     $(document).ready( function () {
-        $('#mytable').DataTable();
-		} );
+        $('#table-1').DataTable();
+
 		
-		// function approveConfirm(url){
-		// $('#btn-terima').attr('href', url);
-		// $('#approveModal').modal();
-		// }
- 
+			
+	} );
+
   </script>
 </body>
 </html>

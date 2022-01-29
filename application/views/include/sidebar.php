@@ -1,6 +1,6 @@
 			<!-- NAVBAR -->
 			
-<div class="main-sidebar">
+			<div class="main-sidebar">
 	<aside id="sidebar-wrapper">
 		<div class="sidebar-brand">
 			<a href="<?= site_url('home')?>">MONCER</a>
@@ -84,21 +84,21 @@
 				<i class="fas fa-comment-alt"></i><span> Data Usulan</span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='validasi_usulan')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('usulan/validasi_usulan')?>">
-				<i class="fas fa-check-circle"></i><span> Validasi Usulan</span></a>
+			<li class="nav-item <?=($hal2=='konfirmasi_usulan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('usulan/konfirmasi_usulan')?>">
+				<i class="fas fa-check-circle"></i><span> Usulan Masuk</span></a>
 			</li>
 
 			<li class="menu-header">Kelola CSR & Laporan</li>
 
-			<li class="nav-item <?=($hal2=='validasi_pendanaan')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/validasi_pendanaan')?>">
-				<i class="fas fa-search-dollar"></i><span> Validasi Pendanaan</span></a>
+			<li class="nav-item <?=($hal2=='usulan_terpilih')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/usulan_terpilih')?>">
+				<i class="fas fa-check-double"></i><span> Usulan Terpilih</span></a>
 			</li>
 
-			<li class="nav-item <?=($hal2=='validasi_laporan')?'active':'';?>">
-				<a class="nav-link" href="<?= site_url('csr/validasi_laporan')?>">
-				<i class="fas fa-calendar-check"></i><span> Validasi Kegiatan </span></a>
+			<li class="nav-item <?=($hal2=='status_pelaksanaan')?'active':'';?>">
+				<a class="nav-link" href="<?= site_url('csr/status_pelaksanaan')?>">
+				<i class="fas fa-calendar-check"></i><span> Status Pelaksanaan </span></a>
 			</li>
 
 			<li class="nav-item <?=($hal2=='laporan_kegiatan')?'active':'';?>">
@@ -147,7 +147,7 @@
 			</li>
 			<li class="nav-item <?=($hal2=='status_kegiatan')?'active':'';?>">
 				<a class="nav-link" href="<?= site_url('csr/status_kegiatan')?>">
-				<i class="fas fa-archive"></i><span> Status Kegiatan CSR</span></a>
+				<i class="fas fa-archive"></i><span> Riwayat Pendanaan</span></a>
 			</li>
 			<li class="nav-item <?php echo ($hal2=='laporan_kegiatan')?'active': '' ?>">
 				<a class="nav-link" href="<?php echo site_url('csr/laporan_kegiatan'); ?>">

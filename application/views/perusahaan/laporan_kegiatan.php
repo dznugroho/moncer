@@ -56,7 +56,8 @@
                       <tr>
 					  	<th>No.</th>
                         <th id="btn-action" >Action</th>
-                        <th>Status Validasi</th>
+                        <th>Konfirmasi Desa</th>
+                        <th>Status Laporan</th>
 						<th>Perusahaan Pelaksana CSR</th>
                         <th>Penanggung Jawab</th>
 						<th>Anggaran Dana Terpenuhi</th>
@@ -103,25 +104,30 @@
 								<a href="<?php echo site_url('csr/laporan_kegiatan/edit/'.$data->csr_id);?>"
 								class="btn btn-primary btn-sm"><i class="far fa-edit"></a></i>
 							</td>
-							<?php }elseif ($item->status_validasi == 3){ ?>
-							<td class="td-btn">
-								<a href="<?php echo site_url('csr/laporan_kegiatan/edit/'.$data->csr_id);?>"
-								class="btn btn-primary btn-sm"><i class="far fa-edit"></a></i>
-							</td>
 							<?php }else{ ?>
 							<td>
 								<div class="badge badge-success"><i class="fas fa-check"></i></div>
 							</td>
 							<?php } ;?>
-
+							
+                            <td><?php if ($item->konfirmasi_desa == 1){
+									echo '<div class="badge badge-warning" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Belum ada konfirmasi"><i class="far fa-hourglass"></i>
+								</div>';
+								}elseif ($item->konfirmasi_desa == 2){
+									echo '<div class="badge badge-danger" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Belum Terlaksana"><i class="fas fa-times"></i></div>';
+								}else{
+									echo '<div class="badge badge-success" data-toggle="tooltip" data-placement="top"
+								title="" data-original-title="Terlaksana"><i class="fas fa-check"></i></div>';
+								};?>
+							</td>
 							<td><?php if ($item->status_validasi == 1){
 									echo '<div class="badge badge-dark">Belum Terlapor</div>';
 								}elseif ($item->status_validasi == 2){
 									echo '<div class="badge badge-info">Terlapor</div>';
-								}elseif ($item->status_validasi == 3){
-									echo '<div class="badge badge-warning">Revisi</div>';
 								}else{
-									echo '<div class="badge badge-success">Valid</div>';
+									echo '<div class="badge badge-success">Diterima</div>';
 								};?>
 							</td>
 							<td><?php echo $item->name;?></td>

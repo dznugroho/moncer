@@ -19,7 +19,7 @@
 <div class="main-content">
 <section class="section">
     <div class="section-header">
-      <h1>Validasi Pendanaan CSR</h1>
+      <h1>Status Kegiatan CSR</h1>
 			<?php $this->load->view('include/breadcrumb.php') ?>
     </div>
 
@@ -55,8 +55,8 @@
                     <thead>
                       <tr>
 					  	<th>No.</th>
-                        <th id="btn-action" >Action</th>
-                        <th>Status Validasi</th>
+                        <th id="btn-action" >Action</th> 
+						<th>Status Pelaksanaan</th>
 						<th>Perusahaan Pelaksana CSR</th>
 						<th>Penanggung Jawab CSR</th>
 						<th>Anggaran Dana CSR</th>
@@ -84,23 +84,50 @@
 					?>
 						<tr>
 							<td><?php echo $no;?></td>
+							<!--<td class="td-btn">-->
+							<!--	<button data-toggle="modal" data-target="#konfirmasi_csr<?php echo $data->csr_id;?>" -->
+							<!--	class="btn btn-primary btn-sm"> Konfirmasi</button>-->
+							<!--</td>-->
+							<?php
+								foreach($laporan as $item):
+									if ($data->id == $item->usulan_id) {
+							?>
+							
+							<?php if ($item->konfirmasi_desa == 1){ ?>
 							<td class="td-btn">
-								<button data-toggle="modal" data-target="#validasiStatus<?php echo $data->csr_id;?>" 
-								class="btn btn-primary btn-sm"> Validasi</button>
+								<button data-toggle="modal" data-target="#konfirmasi_csr<?php echo $data->csr_id;?>" 
+								class="btn btn-primary btn-sm"> Konfirmasi</button>
 							</td>
-							<td><?php if ($data->status_csr == "1"){
-									echo '<div class="badge badge-warning">Proses</div>';
-								}elseif ($data->status_csr == "2"){
-									echo '<div class="badge badge-success">Diterima</div>';
-								}else{
-									echo '<div class="badge badge-danger">Ditolak</div>';
-								};?>
+							<?php }elseif ($item->konfirmasi_desa == 2){ ?>
+							<td class="td-btn">
+								<button data-toggle="modal" data-target="#konfirmasi_csr<?php echo $data->csr_id;?>" 
+								class="btn btn-warning btn-sm"><i class="fas fa-sync"></i></button>
 							</td>
+							<?php }else{ ?>
+							<td class="td-btn">
+								<div class="badge badge-success" data-toggle="tooltip" data-placement="top"
+							    title="" data-original-title="Sudah Dikonfirmasi"><i class="fas fa-check"></i></div>
+							</td>
+							<?php } ;?>
+							
+							<?php }endforeach;?>				
+							
 							<?php
 								foreach($csr as $item):
 									if ($data->id == $item->usulan_id) {
 							?>
-							
+							<td><?php date_default_timezone_set('Asia/Jakarta');;
+								if($item->TGL_LEBAR == ""){
+									if(date('Y-m-d') < $item->tgl_mulai){
+										echo '<div class="badge badge-danger">Belum Terlaksana</div>';
+
+									}elseif(date('Y-m-d') >= $item->tgl_mulai){
+										echo '<div class="badge badge-info">Dalam Pelaksanaan</div>';
+									}
+								}else{
+									echo '<div class="badge badge-success">Terlaksana</div>';
+								}?>		
+							</td>
 							<td><?php echo $item->name;?></td>
 							<td><?php echo strtoupper($item->penanggung_jawab);?></td>
 							<td><?php echo 'Rp.'.number_format($item->dana);?></td>
@@ -110,9 +137,7 @@
 							
 							<?php }endforeach;?>
                             <td>===</td>
-							<!-- <td class="td-btn">
-								<a href="<?php echo site_url('csr/validasi_pendanaan/show/'.$data->id);?>" class="btn btn-info btn-sm"> Detail</a>
-							</td> -->
+							
 							
 							<td><?php echo $data->nama_bidang;?></td>
                             <td><?php echo $data->nama_sub;?></td>
@@ -138,33 +163,33 @@
 </div>
 
 <?php
-	foreach ($csr as $row):
+	foreach ($laporan as $row):
+	
 ?>
-<div class="modal fade" id="validasiStatus<?php echo $row->csr_id;?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+<div class="modal fade" id="konfirmasi_csr<?php echo $row->csr_id;?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_edit">Validasi Pendanaan</h5>
+                <h4 class="modal-title" id="modal_edit">Konfirmasi Pelaksanaan CSR</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form class="form-horizontal" method="post" action="<?php echo base_url('csr/validasi_pendanaan/validasidana')?>">
+            <form class="form-horizontal" method="post" action="<?php echo base_url('csr/status_kegiatan/konfirmasi_csr')?>">
 			  <div class="modal-body">
 			  	<div class="form-group">
-					<label>Validasi Status</label>
-					<select class="form-control" name="status_csr" id="status_csr">
-						<option selected disabled>--Pilih Status---</option>
-						<option value="2">Terima</option>
-						<option value="3">Tolak</option>
+					<label>Status Pelaksanaan</label>
+					<select class="form-control" name="konfirmasi_desa" id="konfirmasi_desa">
+						<option selected disabled>--Pilih Status--</option>
+						<option value="2">Belum Terlaksana</option>
+						<option value="3">Terlaksana</option>
 					</select>
 				</div>
+			   <input type="hidden" name="csr_id" value="<?php echo $row->csr_id;?>" >
 			  </div>
-			  	<input type="hidden" name="usulan_id" value="<?php echo $row->usulan_id;?>">
-                <input type="hidden" name="csr_id" value="<?php echo $row->csr_id;?>">
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Batal</button>
+                    <button type="submit" class="btn btn-primary">Konfirmasi</button>
+                    <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
                 </div>
             </form>
             </div>
@@ -187,11 +212,51 @@
 	<script type="text/javascript">
     $(document).ready( function () {
         $('#table-1').DataTable();
-
 		
-			
+		
 	} );
+		
+	function deleteConfirm(url){
+		$('#btn-delete').attr('href', url);
+		$('#deleteModal').modal();
+		}
 
+	var currencyInput = document.querySelectorAll( 'input[type="currency"]' );
+
+    for ( var i = 0; i < currencyInput.length; i++ ) {
+
+        var currency = 'IDR'
+        onBlur( {
+            target: currencyInput[ i ]
+        } )
+
+        currencyInput[ i ].addEventListener( 'focus', onFocus )
+        currencyInput[ i ].addEventListener( 'blur', onBlur )
+
+        function localStringToNumber( s ) {
+            return Number( String( s ).replace( /[^0-9.-]+/g, "" ) )
+        }
+
+        function onFocus( e ) {
+            var value = e.target.value;
+            e.target.value = value ? localStringToNumber( value ) : ''
+        }
+
+        function onBlur( e ) {
+            var value = e.target.value
+
+            var options = {
+                maximumFractionDigits: 0,
+                currency: currency,
+                style: "currency",
+                currencyDisplay: "symbol"
+            }
+
+            e.target.value = ( value || value === 0 ) ?
+                localStringToNumber( value ).toLocaleString( undefined, options ) :
+                ''
+        }
+    }
   </script>
 </body>
 </html>

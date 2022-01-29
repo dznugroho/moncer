@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script allowed');
 
-class Validasi_laporan extends CI_Controller
+class Status_pelaksanaan extends CI_Controller
 {
 	public function __construct()
 	{
@@ -31,7 +31,7 @@ class Validasi_laporan extends CI_Controller
 			$data['bidangs']		= $this->bidang_model->getBidang();
 			$data['usulans']		= $this->csr_model->getValidasiLaporan();
 			$data['laporan']		= $this->csr_model->getDataLapVal();
-			$this->load->view('csr/validasi_laporan', $data);
+			$this->load->view('csr/status_pelaksanaan', $data);
 			// print_r($data['usulans']);
 		}
 
@@ -46,7 +46,7 @@ class Validasi_laporan extends CI_Controller
 			$data['bidangs']		= $this->bidang_model->getBidang();
 			$data['usulans']		= $this->csr_model->getCariValidasi();
 			$data['laporan']		= $this->csr_model->getDataLapVal();
-			$this->load->view('csr/validasi_laporan', $data);
+			$this->load->view('csr/status_pelaksanaan', $data);
 		}else{
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
 			$data['desas']			= $this->wilayah_model->getDesa();
@@ -64,12 +64,11 @@ class Validasi_laporan extends CI_Controller
 			$post				= $this->input->post();
 			$csr_id				= $post["csr_id"];
 			$status_validasi	= $post["status_validasi"];
-			$ket_validasi		= $post["ket_validasi"];
 
-			$this->csr_model->validasiLaporan($csr_id,$status_validasi,$ket_validasi);
+			$this->csr_model->validasiLaporan($csr_id,$status_validasi);
 
-			$this->session->set_flashdata('success', 'Status Pendanaan Telah Diubah');
-			return redirect('csr/validasi_laporan');
+			$this->session->set_flashdata('success', 'Laporan Telah Dikonfirmasi');
+			return redirect('csr/status_pelaksanaan');
 		
 		}
 	}

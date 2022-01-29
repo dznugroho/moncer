@@ -69,7 +69,7 @@
 		  </div> -->
 		  
 			<input type="hidden" class="form-control" name="status_validasi" 
-			id="status_validasi" value="4"> 
+			id="status_validasi" value="3"> 
 	
 		  <div class="form-group col-3">
 			<select class="form-control" type="text" name="cari" id="cari" required>
@@ -79,8 +79,15 @@
 			</select>
 		  </div>
 		  <div class="form-group col-3">
-			<button class="btn btn-icon icon-left btn-primary" type="submit"><i class="fa fa-search"></i></button>
-			<a href="<?php echo site_url('csr/laporan_kegiatan'); ?>" class="btn btn-icon icon-left btn-danger" ><i class="fas fa-sync"></i> Reset</a>
+		    <div class="btn-group mb-3 btn-group-md" role="group" aria-label="Basic example">
+			<button class="btn btn-icon icon-left btn-primary" type="submit" data-toggle="tooltip"
+                data-placement="top" title="" data-original-title="Cari / Print"><i class="fa fa-search"></i>
+            </button>
+			<a href="<?php echo site_url('csr/laporan_kegiatan'); ?>" class="btn btn-icon icon-left btn-danger" 
+			    data-toggle="tooltip" data-placement="top" title="" data-original-title="Reset">
+			    <i class="fas fa-sync"></i>
+			</a>
+			</div>
 		</form>
 		  </div>
 
@@ -96,11 +103,11 @@
                       <tr>
 					  	<th>No.</th>
                         <!-- <th id="btn-action" >Action</th> -->
-                        <th>Status Validasi</th>
+                        <!--<th>Status Validasi</th>-->
 						<th>Perusahaan Pelaksana CSR</th>
                         <th>Penanggung Jawab CSR</th>
 						<th>Anggaran Dana Terpenuhi</th>
-						<th>Rencana Target Terpenuhi</th>
+						<th>Target Terpenuhi</th>
 						<th>Tanggal Rencana Mulai</th>
 						<th>Tanggal Selesai</th>
 						<!-- <th>Rincian kegiatan</th> -->
@@ -137,16 +144,7 @@
 									if ($data->id == $item->usulan_id) {
 							?>
 							
-							<td><?php if ($item->status_validasi == 1){
-									echo '<div class="badge badge-dark">Belum Terlapor</div>';
-								}elseif ($item->status_validasi == 2){
-									echo '<div class="badge badge-info">Terlapor</div>';
-								}elseif ($item->status_validasi == 3){
-									echo '<div class="badge badge-warning">Revisi</div>';
-								}else{
-									echo '<div class="badge badge-success">Valid</div>';
-								};?>
-							</td>
+				 		
 							<td><?php echo $item->name;?></td>
 							<td><?php if($item->penanggung_jawab == ""){
 									echo '-';
@@ -250,8 +248,7 @@
 					<select class="form-control" name="status_validasi" id="status_validasi">
 						<option selected disabled>--Pilih Status---</option>
 						<option value="2">Terlapor</option>
-						<option value="3">Revisi</option>
-						<option value="4">Valid</option>
+						<option value="3>Valid</option>
 					</select>
 				</div>
 				<div class="form-group">

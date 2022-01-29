@@ -103,11 +103,11 @@
 						<td><?php echo $usulan->name;?></td>
 					</tr>
 
-					<tr>
-						<th colspan="2">Catatan Laporan</th>
-						<td> : </td>
-						<td><div class="badge badge-info"><?php echo strtoupper($laporan->ket_validasi);?></div></td>
-					</tr>
+					<!--<tr>-->
+					<!--	<th colspan="2">Catatan Laporan</th>-->
+					<!--	<td> : </td>-->
+					<!--	<td><div class="badge badge-info"><?php echo strtoupper($laporan->ket_validasi);?></div></td>-->
+					<!--</tr>-->
 					</tbody>
 					<tfoot>
 					<tr>

@@ -25,7 +25,8 @@ class Status_kegiatan extends CI_Controller
 			$data['desas']			= $this->wilayah_model->getDesa();
 			$data['usulans']		= $this->csr_model->getStatusKegiatanDesa();
 			$data['csr']			= $this->csr_model->getDataStatusKegiatanDesa();
-			$this->load->view('desa/status_kegiatan', $data);
+			$data['laporan']		= $this->csr_model->getDataLapVal();
+			$this->load->view('usulan_desa/status_kegiatan', $data);
 			// print_r($data['usulans']);
 		}elseif($this->session->userdata('role') =='3'){
 			$data['kecamatans']		= $this->wilayah_model->getKecamatan();
@@ -82,6 +83,19 @@ class Status_kegiatan extends CI_Controller
 		$this->csr_model->updateStatusPendanaan($usulan_id);
 		$this->session->set_flashdata('success', 'Data has been deleted');
 		redirect(site_url('csr/status_kegiatan'));
+	}
+	
+	public function konfirmasi_csr()
+	{
+	    $post				= $this->input->post();
+
+		$konfirmasi_desa	= $post["konfirmasi_desa"];
+		$csr_id				= $post["csr_id"];
+		
+		$this->csr_model->KonfirmasiCSR($csr_id,$konfirmasi_desa);
+
+		$this->session->set_flashdata('success', 'Pelaksanaan Berhasil Dikonfirmasi');
+		return redirect('csr/status_kegiatan');
 	}
 
 	// public function embed()

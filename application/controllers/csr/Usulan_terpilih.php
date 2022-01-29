@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script allowed');
 
-class Validasi_pendanaan extends CI_Controller
+class Usulan_terpilih extends CI_Controller
 {
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class Validasi_pendanaan extends CI_Controller
 			$data['desas']			= $this->wilayah_model->getDesa();
 			$data['usulans']		= $this->csr_model->getValidasiDana();
 			$data['csr']			= $this->csr_model->getDatacsrVal();
-			$this->load->view('csr/validasi_pendanaan', $data);
+			$this->load->view('csr/usulan_terpilih', $data);
 		}
 	}
 
@@ -40,22 +40,22 @@ class Validasi_pendanaan extends CI_Controller
 				$this->csr_model->saveLapKegiatan($csr_id);
 				$this->csr_model->validasiPendanaan($csr_id,$status_csr);
 
-				$this->session->set_flashdata('success', 'Status Pendanaan Telah Diubah');
-				return redirect('csr/validasi_pendanaan');
-			
-			}else if($status_csr == 3){
-				$csr_id				= $post["csr_id"];
-				$status_csr			= $post["status_csr"];
+				$this->session->set_flashdata('success', 'Pendanaan Telah Dikonfirmasi');
+				return redirect('csr/usulan_terpilih');
+			}
+// 			}else if($status_csr == 3){
+// 				$csr_id				= $post["csr_id"];
+// 				$status_csr			= $post["status_csr"];
 
-				$usulan_id			= $post["usulan_id"];
+// 				$usulan_id			= $post["usulan_id"];
 
-				$this->csr_model->validasiPendanaan($csr_id,$status_csr);
-				$this->csr_model->updateStatusPendanaan($usulan_id);
-				// $this->csr_model->deleteLapKegiatan($csr_id);
+// 				$this->csr_model->validasiPendanaan($csr_id,$status_csr);
+// 				$this->csr_model->updateStatusPendanaan($usulan_id);
+// 				// $this->csr_model->deleteLapKegiatan($csr_id);
 
-				$this->session->set_flashdata('success', 'Status Pendanaan Telah Diubah');
-				return redirect('csr/validasi_pendanaan');
-			}	
+// 				$this->session->set_flashdata('success', 'Status Pendanaan Telah Diubah');
+// 				return redirect('csr/usulan_terpilih');
+// 			}	
 		}
 	}
 

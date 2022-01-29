@@ -69,8 +69,13 @@ class Usulan_model extends CI_Model
 
 	public function countTotal()
 	{
-		return $this->db->get('usulans')->result();
+		return $this->db->select('*')
+		                ->from('usulans')
+		                ->where('status_pengajuan',2)
+		                ->get()
+		                ->result();
 	}
+	
 
 	public function countValidasi()
 	{
