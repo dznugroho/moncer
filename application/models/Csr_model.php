@@ -29,6 +29,47 @@ class Csr_model extends CI_Model
 	{
 		return $this->db->select('*')
 		                ->from('csr')
+		                ->where('status_csr', 2)
+		                ->get()
+		                ->result();
+	}
+
+	public function usulanDidanai()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('csr')
+		                ->where('perusahaan_id', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function pendanaanDiproses()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('csr')
+		                ->where('status_csr', 1)
+		                ->where('perusahaan_id', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function pendanaanDiterima()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('csr')
+		                ->where('status_csr', 2)
+		                ->where('perusahaan_id', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function chartSeringDanai()
+	{
+		return $this->db->select('users.name, SUM(csr.dana) FROM CSR where')
+		                ->from('csr')
 		                ->where('status_csr',2)
 		                ->get()
 		                ->result();
@@ -116,11 +157,11 @@ class Csr_model extends CI_Model
 			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'right')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
 			->join('laporan',	'laporan.csr_id			= csr.csr_id',		'left')
+			->order_by('status_validasi', 'DESC')
 			->where('status_csr', 2)
 			->where('status_validasi !=', 3)
 			->where('status_pengajuan', 2)
 			->where('status_pendanaan', 2)
-			->order_by('status_validasi', 2)
 			->get()->result();
 	}
 
@@ -259,6 +300,7 @@ class Csr_model extends CI_Model
 			->where('status_csr', 2)
 			->where('status_pengajuan', 2)
 			->where('status_pendanaan', 2)
+			->order_by('status_validasi', 2)
 			->get()->result();
 	}
 
@@ -361,10 +403,11 @@ class Csr_model extends CI_Model
 			->join('bidangs',	'usulans.bidang_id 		= bidangs.id',		'right')
 			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'right')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
+			->join('laporan',	'laporan.csr_id			= csr.csr_id',	'left')
 			->where('id_pengusul', $id)
 			->where('status_pengajuan', 2)
 			->where('status_csr', 2)
-			
+			->order_by('status_validasi', "ASC")
 			->get()->result();
 	}
 
@@ -400,7 +443,6 @@ class Csr_model extends CI_Model
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
 			->join('laporan',	'laporan.csr_id			= csr.csr_id',		'left')
 			->where('status_csr', 2)
-			
 			->where('status_pengajuan', 2)
 			->where('status_pendanaan', 2)
 			->like('usulans.bidang_id', $bidang)

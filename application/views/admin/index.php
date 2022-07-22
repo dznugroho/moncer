@@ -96,9 +96,9 @@
 							class="btn btn-primary btn-md" data-toggle="tooltip" data-placement="top"
 							title="" data-original-title="Ubah"><i class="far fa-edit"></a></i>
 							
-							<a onclick="deleteConfirm('<?php echo site_url('user/admin/delete/'.$data->id) ;?>')" 
+							<!-- <a onclick="deleteConfirm('<?php echo site_url('user/admin/delete/'.$data->id) ;?>')" 
 							class="btn btn-danger btn-md" href="#" data-toggle="tooltip" data-placement="top"
-							title="" data-original-title="Hapus"><i class="fas fa-trash"></a></i>
+							title="" data-original-title="Hapus"><i class="fas fa-trash"></a></i> -->
 							</div>
 							</td>
 						</tr>

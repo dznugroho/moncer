@@ -125,23 +125,11 @@
                             <td><?php echo $data->name;?></td>
 							<td><?php if($data->file=="default.pdf"
 							OR $data->file==""){
-							$fill = $data->file;
-							$aksi = site_url('usulan/datausulan/addFile');
-							$tampil = 
-<<<HEREDOCS
-							<form action="$aksi" method="post" enctype="multipart/form-data" >
-								<input type="file" name="file">             
-								<input type="hidden" name="id" value="$data->id">
-								<br>
-								<button type="submit" class="btn btn-primary btn-sm"
-								data-toggle="tooltip" data-placement="top"> Tambah File</button>
-							</form>
-HEREDOCS;
-							echo $tampil;
+								echo '<div class="badge badge-danger">Proposal belum diupload</div>';
 							}else{?>
 								<button onclick='open("<?php echo site_url('usulan/datausulan/embed/'.$data->file);?>",
 								"displayWindow","width=700,height=600,status=no,toolbar=no,menubar=no,left=355");'
-								class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" 
+								class="btn btn-info btn-sm tooltip-info" data-toggle="tooltip" data-placement="top" 
 								title="" data-original-title="Lihat Data">LihatFile</button>
 							<?php } ?>
 

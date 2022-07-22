@@ -103,7 +103,7 @@ class CI_Controller {
 	public function cek_status()
 	{
 		$this->load->library('session');
-		$this->session->sess_expiration = '7200';
+		// $this->session->sess_expiration = '7200';
 		// if($this->session->sess_expiration >= 1000){
 		// 	redirect('auth');
 		// }

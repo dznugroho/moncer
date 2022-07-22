@@ -116,7 +116,7 @@
 								foreach($csr as $item):
 									if ($data->id == $item->usulan_id) {
 							?>
-							<td><?php date_default_timezone_set('Asia/Jakarta');;
+							<td><?php date_default_timezone_set('Asia/Jakarta');
 								if($item->TGL_LEBAR == ""){
 									if(date('Y-m-d') < $item->tgl_mulai){
 										echo '<div class="badge badge-danger">Belum Terlaksana</div>';

@@ -8,8 +8,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="<?php echo base_url('assets/js/stisla.js') ?>"></script>
 
+  <!-- <script src="<?php echo base_url('assets/modules/Chart.min.js') ?>"></script> -->
+
   <!-- Template JS File -->
   <script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
 	<script src="<?php echo base_url('assets/js/custom.js')?>"></script>
 
+  <!-- <script src="<?php echo base_url('assets/js/page/modules-chartjs.js') ?>"></script> -->
 

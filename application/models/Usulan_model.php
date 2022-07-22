@@ -67,15 +67,78 @@ class Usulan_model extends CI_Model
 		->result();
 	}
 
-	public function countTotal()
+	public function countTotalPengajuan()
 	{
+		$id = $this->session->userdata('id');
 		return $this->db->select('*')
 		                ->from('usulans')
-		                ->where('status_pengajuan',2)
+		                ->where('id_pengusul', $id)
 		                ->get()
 		                ->result();
 	}
-	
+
+	public function pengajuanDiproses()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('usulans')
+		                ->where('status_pengajuan', 1)
+		                ->where('id_pengusul', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function pengajuanDiterima()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('usulans')
+		                ->where('status_pengajuan', 2)
+		                ->where('id_pengusul', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function pengajuanDitolak()
+	{
+		$id = $this->session->userdata('id');
+		return $this->db->select('*')
+		                ->from('usulans')
+		                ->where('status_pengajuan', 3)
+		                ->where('id_pengusul', $id)
+		                ->get()
+		                ->result();
+	}
+
+	public function chartBelumTerlaksana()
+	{
+		$perusahaan_id = $this->session->userdata('id');
+		$chartbelum = $this->db
+			->select('usulans.*,kecamatans.nama_kecamatan,desas.nama_desa,csr.penanggung_jawab,
+					nama_satuan,users.name,csr.csr_id,csr.usulan_id,csr.status_csr,
+					csr.perusahaan_id,bidangs.nama_bidang, subbidangs.nama_sub
+								')
+			->from('csr')
+			->join('usulans',	'usulans.id				= csr.usulan_id',	'left')
+			->join('users',		'usulans.id_pengusul	= users.id',		'right')
+			->join('kecamatans','usulans.kecamatan_id	= kecamatans.id',	'right')
+			->join('desas',		'usulans.desa_id 		= desas.id',		'right')
+			->join('bidangs',	'usulans.bidang_id 		= bidangs.id',		'right')
+			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'right')
+			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
+			->join('laporan',	'laporan.csr_id			= csr.csr_id',		'left')
+			->where('perusahaan_id', $perusahaan_id)
+			->where('status_csr', 2)
+			->where('status_pengajuan', 2)
+			->where('status_pendanaan', 2)
+			->order_by('status_validasi', 2)
+			->get()->row();
+
+	}
+	public function HasileBelum()
+	{
+		
+	}
 
 	public function countValidasi()
 	{
@@ -101,7 +164,7 @@ class Usulan_model extends CI_Model
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id',	'left')
 			->where('status_pengajuan', 2)
 			->where('status_pendanaan', 1)
-			->order_by('usulans.created_at', 'DESC')
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->result();
 	}
 
@@ -117,9 +180,9 @@ class Usulan_model extends CI_Model
 			->join('bidangs',	'usulans.bidang_id 		= bidangs.id',		'left')
 			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'left')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id',	'left')
-			->order_by('usulans.created_at', 'DESC')
 			->where('status_pengajuan', 1)
 			->or_where('status_pengajuan', 3)
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->result();
 	}
 
@@ -137,7 +200,7 @@ class Usulan_model extends CI_Model
 			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'left')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id',	'left')
 			->where('id_pengusul', $id )
-			->order_by('usulans.created_at', 'DESC')
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->result();
 	}
 
@@ -155,7 +218,7 @@ class Usulan_model extends CI_Model
 			->join('subbidangs','usulans.subbidang_id	= subbidangs.id',	'left')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
 			->where('usulans.id', $id)
-			->order_by('usulans.created_at', 'DESC')
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->row();
 	}
 
@@ -192,7 +255,7 @@ class Usulan_model extends CI_Model
 			->join('kecamatans','users.kecamatan	= kecamatans.id',	'left')
 			->join('desas',		'users.desa 		= desas.id',		'left')
 			->where('usulan_id', $id)
-			->order_by('csr.created_at', 'DESC')
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->result();
 	}
 
@@ -211,7 +274,7 @@ class Usulan_model extends CI_Model
 			->join('csr',		'usulans.id				= csr.usulan_id',	'right')
 			->join('satuan',	'usulans.satuan_id		= satuan.satuan_id','left')
 			->where('usulans.id', $id)
-			->order_by('usulans.created_at', 'DESC')
+			->order_by('usulans.thn_pengusulan', 'DESC')
 			->get()->row();
 	}
 
@@ -340,7 +403,7 @@ class Usulan_model extends CI_Model
 	
 	private function deleteFile($id)
 	{
-		$usulan = $this->getById($id);
+		$usulan = $this->getUsulanById($id);
 		if ($usulan->file != "default.pdf") {
 			$filename = explode(".", $usulan->file)[0];
 			return array_map('unlink', glob(FCPATH."upload/file/$filename.*"));

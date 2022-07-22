@@ -62,15 +62,15 @@ class Status_kegiatan extends CI_Controller
 
 	}
 
-	public function delete($usulan_id=null)
-	{
-		if(!isset($usulan_id)) show_404();
+	// public function delete($usulan_id=null)
+	// {
+	// 	if(!isset($usulan_id)) show_404();
 
-		$this->csr_model->delete($usulan_id);
-		$this->csr_model->updateStatusPendanaan($usulan_id);
-		$this->session->set_flashdata('success', 'Data has been deleted');
-		redirect(site_url('csr/status_kegiatan'));
-	}
+	// 	$this->csr_model->delete($usulan_id);
+	// 	$this->csr_model->updateStatusPendanaan($usulan_id);
+	// 	$this->session->set_flashdata('success', 'Data has been deleted');
+	// 	redirect(site_url('csr/status_kegiatan'));
+	// }
 
 	public function deleteWithStatus()
 	{

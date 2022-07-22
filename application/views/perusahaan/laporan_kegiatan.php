@@ -180,7 +180,7 @@ HEREDOCS;
 							<?php } ?>
 
 							</td>
-							<td><?php date_default_timezone_set('Asia/Jakarta');;
+							<td><?php date_default_timezone_set('Asia/Jakarta');
 								if($item->tgl_selesai == ""){
 									if(date('Y-m-d') < $item->tgl_mulai){
 										echo '<div class="badge badge-danger">Belum Terlaksana</div>';
